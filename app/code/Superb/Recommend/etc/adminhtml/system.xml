@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!--
+   Superb_Recommend
+
+   NOTICE OF LICENSE
+
+   This source file is subject to the Open Software License (OSL 3.0), a
+   copy of which is available through the world-wide-web at this URL:
+   http://opensource.org/licenses/osl-3.0.php
+
+   @category   Superb
+   @package    Superb_Recommend
+   @author     Superb <hello@wearesuperb.com>
+   @copyright  Copyright (c) 2015 Superb Media Limited
+   @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="superbrecommend" translate="label" sortOrder="210">
+            <label>RECOMMEND</label>
+        </tab>
+        <section id="superbrecommend" translate="label" type="text" sortOrder="2000" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Recommendations</label>
+            <tab>superbrecommend</tab>
+            <resource>Superb_Recommend::config_superbrecommend</resource>
+            <group id="general_settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="account_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Account Id</label>
+                </field>
+                <field id="server_url" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Server URL</label>
+                    <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>
+                </field>
+                <field id="server_secure_url" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Server Secure URL</label>
+                    <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>
+                </field>
+                <field id="api_url" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>API URL</label>
+                    <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>
+                </field>
+                <field id="api_key" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>API Key</label>
+                    <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Obscure</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="product_attributes" translate="label comment" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Additional product attributes</label>
+                    <frontend_model>Superb\Recommend\Block\Adminhtml\System\Config\Form\FieldArray\Product\Attributes</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>Attributes to track on product view page.</comment>
+                </field>
+                <field id="customer_attributes" translate="label comment" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Additional customer attributes</label>
+                    <frontend_model>Superb\Recommend\Block\Adminhtml\System\Config\Form\FieldArray\Customer\Attributes</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>Attributes to track on customer login.</comment>
+                </field>
+                <field id="advanced" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Advanced mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="panels" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Recommendation Panels</label>
+                <field id="show_out_of_stock_products" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show out of stock products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="media_thumb_source" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Thumbnail source</label>
+                    <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>
+                    <source_model>Superb\Recommend\Model\System\Config\Source\Thumbnail</source_model>
+                </field>
+                <field id="media_thumb_width" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Thumbnail width</label>
+                    <comment>in pixels.</comment>
+                </field>
+                <field id="media_thumb_height" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Thumbnail height</label>
+                    <comment>in pixels.</comment>
+                </field>
+            </group>
+            <group id="status_cron" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Updating products status</label>
+                <frontend_model>Superb\Recommend\Block\System\Config\Form\Fieldset\Advanced</frontend_model>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>
+                </field>
+                <field id="frequency" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Frequency</label>
+                    <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>
+                    <source_model>Superb\Recommend\Model\System\Config\Source\Cron\Frequency</source_model>
+                    <backend_model>Superb\Recommend\Model\System\Config\Backend\Cron</backend_model>
+                </field>
+            </group>
+            <group id="data_cron" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Updating products data</label>
+                <frontend_model>Superb\Recommend\Block\System\Config\Form\Fieldset\Advanced</frontend_model>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enabled</label>
+                    <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="frequency" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Frequency</label>
+                    <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>
+                    <source_model>Superb\Recommend\Model\System\Config\Source\Cron\Frequency</source_model>
+                    <backend_model>Superb\Recommend\Model\System\Config\Backend\Cron</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

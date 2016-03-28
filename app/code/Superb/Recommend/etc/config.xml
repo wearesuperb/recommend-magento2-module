@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+   Superb_Recommend
+
+   NOTICE OF LICENSE
+
+   This source file is subject to the Open Software License (OSL 3.0), a
+   copy of which is available through the world-wide-web at this URL:
+   http://opensource.org/licenses/osl-3.0.php
+
+   @category   Superb
+   @package    Superb_Recommend
+   @author     Superb <hello@wearesuperb.com>
+   @copyright  Copyright (c) 2015 Superb Media Limited
+   @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <superbrecommend>
+            <general_settings>
+                <server_url>http://tracking.recommend.pro/</server_url>
+                <server_secure_url>https://tracking.recommend.pro/</server_secure_url>
+                <api_url>https://api.recommend.pro/</api_url>
+                <advanced>1</advanced>
+            </general_settings>
+            <panels>
+                <media_thumb_source>small_image</media_thumb_source>
+                <media_thumb_width>240</media_thumb_width>
+                <media_thumb_height>300</media_thumb_height>
+            </panels>
+            <status_cron>
+                <enabled>1</enabled>
+                <frequency>every5minutes</frequency>
+            </status_cron>
+            <data_cron>
+                <enabled>1</enabled>
+                <frequency>daily</frequency>
+            </data_cron>
+        </superbrecommend>
+    </default>
+</config>

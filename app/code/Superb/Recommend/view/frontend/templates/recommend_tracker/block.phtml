@@ -1,0 +1,26 @@
+<?php
+/*
+ * Superb_Recommend
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Open Software License (OSL 3.0), a
+ * copy of which is available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * 
+ * @category   Superb
+ * @package    Superb_Recommend
+ * @author     Superb <hello@wearesuperb.com>
+ * @copyright  Copyright (c) 2015 Superb Media Limited
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+?>
+<?php // <!-- {dynamic tags --> ?>
+<script>
+<?php $data = $this->getTrackingData();?>
+<?php if (is_array($data)):?><?php foreach ($data as $record): if (is_array($record) && count($record)):?>
+_taq.push(<?php echo json_encode($record);?>);
+<?php endif; endforeach; endif; ?>
+_taq.push(["trackPageview"]);
+</script>
+<?php // <!-- dynamic tags} --> ?>

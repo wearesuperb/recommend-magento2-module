@@ -1,0 +1,31 @@
+<?php
+/*
+ * Superb_Recommend
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Open Software License (OSL 3.0), a
+ * copy of which is available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * 
+ * @category   Superb
+ * @package    Superb_Recommend
+ * @author     Superb <hello@wearesuperb.com>
+ * @copyright  Copyright (c) 2015 Superb Media Limited
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+?>
+<?php $helper = $this->helper('Superb\Recommend\Helper\Data'); ?>
+<script>
+    (function(){
+    var tracker = document.createElement('script'); tracker.type = 'text/javascript'; tracker.async = true;tracker.src = <?php echo json_encode($helper->getApiJsUrl());?>;
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(tracker, s);
+    })();
+    var _taq = _taq || [];
+    _taq.push(["setAccountId", <?php echo json_encode($helper->getAccountId());?>] ,["setTrackerUrl",<?php echo json_encode($helper->getApiUrl());?>], ["setCurrentCurrencyCode",<?php echo json_encode($helper->getCurrentCurrencyCode());?>], ["setCurrentStoreCode",<?php echo json_encode($helper->getCurrentStoreCode());?>]);
+    <?php $data = $this->getTrackingData();?>
+    <?php if (is_array($data)):?><?php foreach ($data as $record): if (is_array($record) && count($record)):?>
+    _taq.push(<?php echo json_encode($record);?>);
+    <?php endif; endforeach; endif; ?>
+</script>
+<?php echo $this->getChildHtml('recommend_tracker');?>
