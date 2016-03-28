@@ -5,4 +5,4 @@ Increase your revenue, drive conversions and transform your eCommerce site today
 
 Get Started
 -----------
-Go to [Recommend](https://recommend.pro/) and [Register](https://control.recommend.pro/signup)
+Go to [Recommend.pro](https://recommend.pro/) and [Register](https://control.recommend.pro/signup)
