@@ -23,6 +23,7 @@
     })();
     var _taq = _taq || [];
     _taq.push(["setAccountId", <?php echo json_encode($helper->getAccountId());?>] ,["setTrackerUrl",<?php echo json_encode($helper->getApiUrl());?>], ["setCurrentCurrencyCode",<?php echo json_encode($helper->getCurrentCurrencyCode());?>], ["setCurrentStoreCode",<?php echo json_encode($helper->getCurrentStoreCode());?>]);
+    _taq.push(["trackBeforeRecommendMode",true]);
     <?php $data = $this->getTrackingData();?>
     <?php if (is_array($data)):?><?php foreach ($data as $record): if (is_array($record) && count($record)):?>
     _taq.push(<?php echo json_encode($record);?>);

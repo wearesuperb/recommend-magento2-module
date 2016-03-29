@@ -303,9 +303,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getApiJsUrl()
     {
         if ($this->storeManager->getStore()->isCurrentlySecure())
-            return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_URL_SECURE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE).'trackerv11.js';
+            return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_URL_SECURE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE).'trackerv12.js';
         else
-            return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_URL, \Magento\Store\Model\ScopeInterface::SCOPE_STORE).'trackerv11.js';
+            return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_URL, \Magento\Store\Model\ScopeInterface::SCOPE_STORE).'trackerv12.js';
     }
 
     public function getCurrentStoreCode()
