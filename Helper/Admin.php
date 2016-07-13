@@ -43,11 +43,10 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\WebsiteFactory $storeWebsiteFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Superb\Recommend\Helper\Api $apiHelper
     ) {
         $this->storeWebsiteFactory = $storeWebsiteFactory;
-        $this->scopeConfig = $scopeConfig;
+        $this->scopeConfig = $context->getScopeConfig();
         $this->_apiHelper = $apiHelper;
         parent::__construct($context);
     }

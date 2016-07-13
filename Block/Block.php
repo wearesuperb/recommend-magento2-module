@@ -16,9 +16,7 @@ namespace Superb\Recommend\Block;
  * @copyright  Copyright (c) 2015 Superb Media Limited
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Module\Manager as ModuleManager;
-use Magento\Framework\View\LayoutInterface;
 
 class Block extends \Magento\Framework\View\Element\Template
 {
@@ -86,8 +84,6 @@ class Block extends \Magento\Framework\View\Element\Template
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Superb\Recommend\Helper\Data $helper,
-        LayoutInterface $layout,
-        RequestInterface $request,
         ModuleManager $moduleManager,
         \Magento\PageCache\Model\Config $pageCacheConfig,
         array $data = []
@@ -95,9 +91,9 @@ class Block extends \Magento\Framework\View\Element\Template
         $this->_customerSession = $customerSession;
         $this->_checkoutCart = $checkoutCart;
         $this->_catalogLayer = $layerResolver->get();
-        $this->_layout = $layout;
+        $this->_layout = $context->getLayout();
         $this->_helper = $helper;
-        $this->_request = $request;
+        $this->_request = $context->getRequest();
         $this->_moduleManager = $moduleManager;
         $this->_pageCacheConfig = $pageCacheConfig;
 		$this->_isScopePrivate = $this->isFullPageCacheEnabled() && !$this->isVarnishEnabled();

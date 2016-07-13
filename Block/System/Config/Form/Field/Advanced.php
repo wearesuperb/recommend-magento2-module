@@ -15,9 +15,9 @@
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
-namespace Superb\Recommend\Block\System\Config\Form\Fieldset;
+namespace Superb\Recommend\Block\System\Config\Form\Field;
 
-class Advanced extends \Magento\Config\Block\System\Config\Form\Fieldset
+class Advanced extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -25,17 +25,12 @@ class Advanced extends \Magento\Config\Block\System\Config\Form\Fieldset
     protected $_scopeConfig;
 
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Backend\Block\Context $context,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\View\Helper\Js $jsHelper,
+        \Magento\Backend\Block\Template\Context $context,
         array $data = []
     ) {
-        $this->_scopeConfig = $scopeConfig;
+        $this->_scopeConfig = $context->getScopeConfig();
         parent::__construct(
             $context,
-            $authSession,
-            $jsHelper,
             $data
         );
     }

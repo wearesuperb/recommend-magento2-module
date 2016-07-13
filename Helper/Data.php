@@ -181,7 +181,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function __construct(
 		\Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Newsletter\Model\SubscriberFactory $newsletterSubscriberFactory,
         \Magento\Eav\Model\Config $eavConfig,
@@ -212,7 +211,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->itemRepository = $itemRepository;
         $this->itemPool = $itemPool;
-        $this->scopeConfig = $scopeConfig;
+        $this->scopeConfig = $context->getScopeConfig();
         $this->storeManager = $storeManager;
         $this->newsletterSubscriberFactory = $newsletterSubscriberFactory;
         $this->eavConfig = $eavConfig;
