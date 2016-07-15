@@ -435,7 +435,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         foreach ($this->getCustomerUpdateAttributes() as $row)
         {
             $attribute = $eavConfig->getAttribute('customer', $row['magento_attribute']);
-            if ($attribute && $attribute->getId() && isset($customerData[$attribute->getAttributeCode()]))
+            if ($attribute && $attribute->getId() && isset($customerData[$attribute->getAttributeCode()]) && isset($row['recommend_attribute']))
             {
                 $_attributeText = $attribute->getSource()->getOptionText(
                     $customerData[$attribute->getAttributeCode()]
@@ -503,7 +503,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         foreach ($this->getProductUpdateAttributes() as $row)
         {
             $attribute = $eavConfig->getAttribute('catalog_product', $row['magento_attribute']);
-            if ($attribute && $attribute->getId())
+            if ($attribute && $attribute->getId() && isset($row['recommend_attribute']))
             {
                 $_attributeText = $_product->getAttributeText($attribute->getAttributeCode());
                 $additionalAttributes[$row['recommend_attribute']] = empty($_attributeText)?$_product->getData($attribute->getAttributeCode()):$_attributeText;
