@@ -55,18 +55,25 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_encryptor;
 
+    /**
+     * @var \Magento\Framework\App\ProductMetadata
+     */
+    protected $productMetadata;
+
     public function __construct(
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Backend\Model\Session $backendSession
+        \Magento\Backend\Model\Session $backendSession,
+        \Magento\Framework\App\ProductMetadata $productMetadata
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->logger = $logger;
         $this->storeManager = $storeManager;
         $this->backendSession = $backendSession;
         $this->_encryptor = $encryptor;
+        $this->productMetadata = $productMetadata;
     }
 
     protected function _getGetTokenUrl($storeId = null)
@@ -345,7 +352,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function updateAccount($storeId = null)
     {
         $ch = curl_init();
-        $data_string = json_encode(array('currency'=>$this->storeManager->getStore($storeId)->getBaseCurrencyCode(),'platform'=>'magento','platform_version'=>AppInterface::VERSION));
+        $data_string = json_encode(array('currency'=>$this->storeManager->getStore($storeId)->getBaseCurrencyCode(),'platform'=>'magento','platform_version'=>$this->productMetadata->getVersion()));
         curl_setopt($ch, CURLOPT_URL, $this->_getUpdateAccountUrl($storeId));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
