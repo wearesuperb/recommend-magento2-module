@@ -55,11 +55,6 @@ class UpdateProductsStatus
     protected $_catalogInventoryStockHelper;
 
     /**
-     * @var \Magento\Framework\App\Config\ElementFactory
-     */
-    protected $configElementFactory;
-
-    /**
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
@@ -74,10 +69,8 @@ class UpdateProductsStatus
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogInventory\Helper\Stock $catalogInventoryStockHelper,
-        \Magento\Framework\App\Config\ElementFactory $configElementFactory,
         \Superb\Recommend\Helper\Api $apiHelper
     ) {
-        $this->configElementFactory = $configElementFactory;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
         $this->catalogConfig = $catalogConfig;

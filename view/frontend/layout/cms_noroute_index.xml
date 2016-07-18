@@ -14,7 +14,7 @@
    @copyright  Copyright (c) 2015 Superb Media Limited
    @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
             <block class="Superb\Recommend\Block\Slot" name="superbrecommend-error-404-slot-1" after="-">

@@ -1,5 +1,5 @@
 {
-    "name": "superb/recommend-magento2-module",
+    "name": "superb/module-recommend",
     "description": "Increase your revenue, drive conversions and transform your eCommerce site today with Recommend",
     "type": "magento2-module",
     "version": "0.0.10",

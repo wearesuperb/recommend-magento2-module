@@ -60,11 +60,6 @@ class UpdateProductsData
     protected $_catalogInventoryStockHelper;
 
     /**
-     * @var \Magento\Framework\App\Config\ElementFactory
-     */
-    protected $configElementFactory;
-
-    /**
      * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
@@ -90,13 +85,11 @@ class UpdateProductsData
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogInventory\Helper\Stock $catalogInventoryStockHelper,
-        \Magento\Framework\App\Config\ElementFactory $configElementFactory,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper,
         \Superb\Recommend\Helper\Api $apiHelper,
         \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->eavConfig = $eavConfig;
-        $this->configElementFactory = $configElementFactory;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
         $this->directoryCurrencyFactory = $directoryCurrencyFactory;
