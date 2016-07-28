@@ -51,8 +51,8 @@ class ProductView implements ObserverInterface
         $product = $observer->getEvent()->getProduct();
         try {
             $data = $this->_helper->getProductViewData($product);
-            $this->_helper->setTrackingData($data,true);
-        } catch (Exception $e) {
+            $this->_helper->setTrackingData($data, true);
+        } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
         return $this;

@@ -68,14 +68,23 @@ abstract class CronAbstract
 
     public function getStoresByAccounts()
     {
-        $storesByAccounts = array();
-        foreach ($this->storeManager->getStores() as $store)
-        {
-            if (!$this->scopeConfig->getValue( \Superb\Recommend\Helper\Data::XML_PATH_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()))
+        $storesByAccounts = [];
+        foreach ($this->storeManager->getStores() as $store) {
+            if (!$this->scopeConfig->getValue(
+                \Superb\Recommend\Helper\Data::XML_PATH_ENABLED,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store->getId()
+            )) {
                 continue;
-            $accountId = $this->scopeConfig->getValue(\Superb\Recommend\Helper\Api::XML_PATH_TRACKING_ACCOUNT_ID, \Magento\Store\Model\ScopeInterface::SCOPE_STORE,$store->getId());
-            if (!isset($storesByAccounts[$accountId]))
-                $storesByAccounts[$accountId] = array();
+            }
+            $accountId = $this->scopeConfig->getValue(
+                \Superb\Recommend\Helper\Api::XML_PATH_TRACKING_ACCOUNT_ID,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store->getId()
+            );
+            if (!isset($storesByAccounts[$accountId])) {
+                $storesByAccounts[$accountId] = [];
+            }
             $storesByAccounts[$accountId][] = $store->getId();
         }
         return $storesByAccounts;
@@ -83,21 +92,35 @@ abstract class CronAbstract
     
     public function execute(\Magento\Cron\Model\Schedule $schedule)
     {
-        if (!$this->scopeConfig->getValue( \Superb\Recommend\Helper\Data::XML_PATH_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE )) {
+        if (!$this->scopeConfig->getValue(
+            \Superb\Recommend\Helper\Data::XML_PATH_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )) {
             return $this;
         }
-        if (!$this->scopeConfig->getValue( $this->_isCronTypeEnabledXmlPath, \Magento\Store\Model\ScopeInterface::SCOPE_STORE )) {
+        if (!$this->scopeConfig->getValue(
+            $this->_isCronTypeEnabledXmlPath,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )) {
             return $this;
         }
-        $products = array();
+        $products = [];
         try {
             $this->storeManager->setCurrentStore('admin');
             $storesByAccounts = $this->getStoresByAccounts();
-            foreach ($this->storeManager->getStores() as $store)
-            {
-                if (!$this->scopeConfig->getValue( \Superb\Recommend\Helper\Data::XML_PATH_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()))
+            foreach ($this->storeManager->getStores() as $store) {
+                if (!$this->scopeConfig->getValue(
+                    \Superb\Recommend\Helper\Data::XML_PATH_ENABLED,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store->getId()
+                )) {
                     continue;
-                $accountId = $this->scopeConfig->getValue(\Superb\Recommend\Helper\Api::XML_PATH_TRACKING_ACCOUNT_ID, \Magento\Store\Model\ScopeInterface::SCOPE_STORE,$store->getId());
+                }
+                $accountId = $this->scopeConfig->getValue(
+                    \Superb\Recommend\Helper\Api::XML_PATH_TRACKING_ACCOUNT_ID,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store->getId()
+                );
                 $this->storeManager->setCurrentStore($store);
                 $this->_resetCurrentStoreData();
                 $collection = $this->productCollectionFactory->create();
@@ -123,22 +146,21 @@ abstract class CronAbstract
                     $productCol->getSelect()->limit(\Superb\Recommend\Helper\Data::LIMIT_STEP, $offset);
 
                     $isEmpty = true;
-                    foreach($productCol as $product)
-                    {
+                    foreach ($productCol as $product) {
                         $isEmpty = false;
                         $offset++;
-                        if (!isset($products[$accountId]))
-                            $products[$accountId] = array();
+                        if (!isset($products[$accountId])) {
+                            $products[$accountId] = [];
+                        }
 
-                        $products[$accountId][$product->getSku()] = $this->_getProductData($products,$accountId,$product);
+                        $products[$accountId][$product->getSku()] = $this->_getProductData($products, $accountId, $product);
                     }
                 }
             }
             $this->storeManager->setCurrentStore('admin');
             $this->_logger->info(json_encode($products));
-            foreach($products as $accountId => $productsData)
-            {
-                $this->_apiHelper->uploadProductsData(array_values($productsData),$storesByAccounts[$accountId][0]);
+            foreach ($products as $accountId => $productsData) {
+                $this->_apiHelper->uploadProductsData(array_values($productsData), $storesByAccounts[$accountId][0]);
             }
         } catch (\Exception $e) {
             $this->_logger->critical($e);
@@ -155,7 +177,7 @@ abstract class CronAbstract
         return $collection;
     }
 
-    protected function _getProductData(&$products,$accountId,$product)
+    protected function _getProductData(&$products, $accountId, $product)
     {
         return ['sku'=>$product->getSku(),'status'=>'online'];
     }

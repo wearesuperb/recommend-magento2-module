@@ -32,22 +32,23 @@ class Thumbnail extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSourc
         $this->eavEntityTypeFactory = $eavEntityTypeFactory;
     }
 
-    public function getAllOptions(){
-        if (is_null($this->_options)){
+    public function getAllOptions()
+    {
+        if ($this->_options === null) {
             $type = $this->eavEntityTypeFactory->create()->loadByCode('catalog_product');
 
             $attributes = $type->getAttributeCollection()->addStoreLabel(0);
 
-            $this->_options = array(array(
+            $this->_options = [[
                 'value' => '',
                 'label' => '',
-            ));
-            foreach ($attributes as $attribute){
-                if ($attribute->getStoreLabel() && $attribute->getFrontend()->getInputType()=='media_image'){
-                    $this->_options[] = array(
+            ]];
+            foreach ($attributes as $attribute) {
+                if ($attribute->getStoreLabel() && $attribute->getFrontend()->getInputType()=='media_image') {
+                    $this->_options[] = [
                         'value' => $attribute->getAttributeCode(),
                         'label' => $attribute->getStoreLabel()
-                    );
+                    ];
                 }
             }
             sort($this->_options);

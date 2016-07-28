@@ -27,6 +27,10 @@ class Obscure extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getElementHtml(AbstractElement $element)
     {
-        return str_replace('<input','<input style="position:absolute;width:0;left:-100px;" type="password" name="password1234" value="1234" /><input',$element->getElementHtml());
+        return str_replace(
+            '<input',
+            '<input style="position:absolute;width:0;left:-100px;" type="password" name="password1234" value="1234" /><input',
+            $element->getElementHtml()
+        );
     }
 }

@@ -79,8 +79,7 @@ class UpdateProductsData extends CronAbstract
 
     protected function _getCurrentStoreCurrencies()
     {
-        if (!is_null($this->_currentStoreCurrencies))
-        {
+        if ($this->_currentStoreCurrencies!==null) {
             $currencies = [];
             $codes = $this->storeManager->getStore()->getAvailableCurrencyCodes(true);
             if (is_array($codes)) {
@@ -92,9 +91,7 @@ class UpdateProductsData extends CronAbstract
                 foreach ($codes as $code) {
                     if (isset($rates[$code])) {
                         $currencies[$code] = $this->directoryCurrencyFactory->create()->load($code);
-                    }
-                    elseif($code==$this->storeManager->getStore()->getBaseCurrency()->getCode())
-                    {
+                    } elseif ($code==$this->storeManager->getStore()->getBaseCurrency()->getCode()) {
                         $currencies[$code] = $this->directoryCurrencyFactory->create()->load($code);
                     }
                 }
@@ -106,9 +103,11 @@ class UpdateProductsData extends CronAbstract
 
     protected function _getCurrentStoreAttributes()
     {
-        if (!is_null($this->_currentStoreAttributes))
-        {
-            $attributes = @unserialize((string)$this->scopeConfig->getValue(\Superb\Recommend\Helper\Data::XML_PATH_TRACKING_PRODUCT_ATTRIBUTES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
+        if ($this->_currentStoreAttributes!==null) {
+            $attributes = @unserialize((string)$this->scopeConfig->getValue(
+                \Superb\Recommend\Helper\Data::XML_PATH_TRACKING_PRODUCT_ATTRIBUTES,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ));
             $this->_currentStoreAttributes = is_array($attributes)?$attributes:[];
         }
         return $this->_currentStoreAttributes;
@@ -117,18 +116,16 @@ class UpdateProductsData extends CronAbstract
     protected function _addAttributesToCollection($collection)
     {
         $attributes = $this->_getCurrentStoreAttributes();
-        $_attributes = array();
-        foreach ($attributes as $row)
-        {
-           $_attributes[] = $row['magento_attribute'];
+        $_attributes = [];
+        foreach ($attributes as $row) {
+            $_attributes[] = $row['magento_attribute'];
         }
         $productFlatAttributeCodes = $this->_productFlatIndexerHelper->getAttributeCodes();
-        foreach($_attributes as $_attributeCode)
-        {
+        foreach ($_attributes as $_attributeCode) {
             $attribute = $this->eavConfig->getAttribute('catalog_product', $_attributeCode);
-            if (in_array($_attributeCode,$productFlatAttributeCodes))
+            if (in_array($_attributeCode, $productFlatAttributeCodes)) {
                 $collection->addAttributeToSelect($_attributeCode);
-            else
+            } else {
                 $collection->joinAttribute(
                     $_attributeCode,
                     'catalog_product/'.$_attributeCode,
@@ -137,48 +134,63 @@ class UpdateProductsData extends CronAbstract
                     'left',
                     $store->getId()
                 );
+            }
         }
         return $collection;
     }
 
-    protected function _getProductData(&$products,$accountId,$product)
+    protected function _getProductData(&$products, $accountId, $product)
     {
-        if (isset($products[$accountId][$product->getSku()]))
-        {
+        if (isset($products[$accountId][$product->getSku()])) {
             $finalPrice = $products[$accountId][$product->getSku()]['price'];
             $price = $products[$accountId][$product->getSku()]['original_price'];
-        }
-        else
-        {
-            $finalPrice = array();
-            $price = array();
+        } else {
+            $finalPrice = [];
+            $price = [];
         }
         $currencies = $this->_getCurrentStoreCurrencies();
-        foreach($currencies as $code => $currency)
-        {
-            if (!isset($price[$code]))
-                $price[$code] = $store->getBaseCurrency()->convert($product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(), $currency);
-            if (!isset($finalPrice[$code]))
-                $finalPrice[$code] = $store->getBaseCurrency()->convert($product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(), $currency);
+        foreach ($currencies as $code => $currency) {
+            if (!isset($price[$code])) {
+                $price[$code] = $store->getBaseCurrency()->convert(
+                    $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
+                    $currency
+                );
+            }
+            if (!isset($finalPrice[$code])) {
+                $finalPrice[$code] = $store->getBaseCurrency()->convert(
+                    $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
+                    $currency
+                );
+            }
         }
 
-        $additionalAttributes = array();
+        $additionalAttributes = [];
         $eavConfig = $this->eavConfig;
         $attributes = $this->_getCurrentStoreAttributes();
-        foreach ($attributes as $row)
-        {
+        foreach ($attributes as $row) {
             $attribute = $eavConfig->getAttribute('catalog_product', $row['magento_attribute']);
-            if ($attribute && $attribute->getId())
-            {
+            if ($attribute && $attribute->getId()) {
                 $_attributeText = $product->getAttributeText($attribute->getAttributeCode());
-                $additionalAttributes[$row['recommend_attribute']] = empty($_attributeText)?$product->getData($attribute->getAttributeCode()):$product->getAttributeText($attribute->getAttributeCode());
-                if (is_array($additionalAttributes[$row['recommend_attribute']]))
-                {
-                    $additionalAttributes[$row['recommend_attribute']] = implode(', ',$additionalAttributes[$row['recommend_attribute']]);
+                $additionalAttributes[$row['recommend_attribute']] = empty($_attributeText)?
+                    $product->getData($attribute->getAttributeCode()):
+                    $product->getAttributeText($attribute->getAttributeCode())
+                ;
+                if (is_array($additionalAttributes[$row['recommend_attribute']])) {
+                    $additionalAttributes[$row['recommend_attribute']] = implode(
+                        ', ',
+                        $additionalAttributes[$row['recommend_attribute']]
+                    );
                 }
             }
         }
 
-        return ['sku'=>$product->getSku(),'status'=>'online','url'=>$product->getProductUrl(),'price'=>$finalPrice,'original_price'=>$price,'additional_attributes' => $additionalAttributes];
+        return [
+            'sku'=>$product->getSku(),
+            'status'=>'online',
+            'url'=>$product->getProductUrl(),
+            'price'=>$finalPrice,
+            'original_price'=>$price,
+            'additional_attributes' => $additionalAttributes
+        ];
     }
 }

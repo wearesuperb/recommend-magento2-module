@@ -32,16 +32,18 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSourc
         $this->_adminHelper = $adminHelper;
     }
 
-    public function getAllOptions(){
-        if (is_null($this->_options)){
+    public function getAllOptions()
+    {
+        if ($this->_options === null) {
             $storeId = $this->_adminHelper->getSystemConfigStoreId();
             $productAttributesData = $this->_adminHelper->getProductAttributesListData($storeId);
-            $this->_options[] = array('value'=>'','label'=>'');
-            if (is_array($productAttributesData))
-            {
-                foreach($productAttributesData as $productAttributeData)
-                {
-                    $this->_options[] = array('value'=>$productAttributeData['code'],'label'=>$productAttributeData['title']);
+            $this->_options[] = ['value'=>'','label'=>''];
+            if (is_array($productAttributesData)) {
+                foreach ($productAttributesData as $productAttributeData) {
+                    $this->_options[] = [
+                        'value'=>$productAttributeData['code'],
+                        'label'=>$productAttributeData['title']
+                    ];
                 }
             }
         }

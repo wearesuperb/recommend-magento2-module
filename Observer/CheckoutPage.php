@@ -50,8 +50,8 @@ class CheckoutPage implements ObserverInterface
         }
         try {
             $data = $this->_helper->processCheckoutPage();
-            $this->_helper->setTrackingData($data,true);
-        } catch (Exception $e) {
+            $this->_helper->setTrackingData($data, true);
+        } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
         return $this;

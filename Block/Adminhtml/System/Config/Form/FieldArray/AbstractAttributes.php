@@ -45,11 +45,12 @@ abstract class AbstractAttributes extends \Magento\Config\Block\System\Config\Fo
      */
     public function renderCellTemplate($columnName)
     {
-        if (in_array($columnName,['recommend_attribute','magento_attribute']) && isset($this->_columns[$columnName])) {
-            if ($columnName=='recommend_attribute')
+        if (in_array($columnName, ['recommend_attribute','magento_attribute']) && isset($this->_columns[$columnName])) {
+            if ($columnName=='recommend_attribute') {
                 $attribute = $this->_recommendAttributeFactory->create();
-            elseif ($columnName=='magento_attribute')
+            } elseif ($columnName=='magento_attribute') {
                 $attribute = $this->_magentoAttributeFactory->create();
+            }
             $options = $attribute->getAllOptions();
             $element = $this->_elementFactory->create('select');
             $element->setForm(
@@ -61,7 +62,7 @@ abstract class AbstractAttributes extends \Magento\Config\Block\System\Config\Fo
             )->setValues(
                 $options
             );
-            return str_replace("\n", '', addcslashes($element->getElementHtml(),"'"));
+            return str_replace("\n", '', addcslashes($element->getElementHtml(), "'"));
         }
 
         return parent::renderCellTemplate($columnName);

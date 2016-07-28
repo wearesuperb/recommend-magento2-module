@@ -53,7 +53,7 @@ class Block extends Template
 
     public function getTrackingData()
     {
-        $data = $this->_helper->getTrackingData(true,true);
+        $data = $this->_helper->getTrackingData(true, true);
         return $data;
     }
 

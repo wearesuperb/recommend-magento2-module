@@ -18,11 +18,11 @@ namespace Superb\Recommend\Helper;
 
 class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    static protected $_slotSystemConfigSaveData = array();
-    static protected $_slotsData = array();
-    static protected $_panelsData = array();
-    static protected $_productAttributesData = array();
-    static protected $_customerAttributesData = array();
+    static protected $_slotSystemConfigSaveData = [];
+    static protected $_slotsData = [];
+    static protected $_panelsData = [];
+    static protected $_productAttributesData = [];
+    static protected $_customerAttributesData = [];
     static protected $_systemConfigStoreId = -1;
 
     /**
@@ -63,8 +63,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getSlotsData($storeId = null)
     {
-        if (!isset(self::$_slotsData[$storeId]))
-        {
+        if (!isset(self::$_slotsData[$storeId])) {
             self::$_slotsData[$storeId] = $this->_apiHelper->getSlotsData($storeId);
         }
         return self::$_slotsData[$storeId];
@@ -72,8 +71,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getPanelsListData($storeId = null)
     {
-        if (!isset(self::$_panelsData[$storeId]))
-        {
+        if (!isset(self::$_panelsData[$storeId])) {
             self::$_panelsData[$storeId] = $this->_apiHelper->getPanelsListData($storeId);
         }
         return self::$_panelsData[$storeId];
@@ -81,8 +79,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getProductAttributesListData($storeId = null)
     {
-        if (!isset(self::$_productAttributesData[$storeId]))
-        {
+        if (!isset(self::$_productAttributesData[$storeId])) {
             self::$_productAttributesData[$storeId] = $this->_apiHelper->getProductAttributesListData($storeId);
         }
         return self::$_productAttributesData[$storeId];
@@ -90,8 +87,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getCustomerAttributesListData($storeId = null)
     {
-        if (!isset(self::$_customerAttributesData[$storeId]))
-        {
+        if (!isset(self::$_customerAttributesData[$storeId])) {
             self::$_customerAttributesData[$storeId] = $this->_apiHelper->getCustomerAttributesListData($storeId);
         }
         return self::$_customerAttributesData[$storeId];
@@ -99,21 +95,31 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getSystemConfigStoreId()
     {
-        if (self::$_systemConfigStoreId==-1)
-        {
-            if (strlen($this->_getRequest()->getParam('store')))
+        if (self::$_systemConfigStoreId==-1) {
+            if (strlen($this->_getRequest()->getParam('store'))) {
                 self::$_systemConfigStoreId = $this->_getRequest()->getParam('store');
-            elseif (strlen($this->_getRequest()->getParam('website')))
-                self::$_systemConfigStoreId = $this->storeWebsiteFactory->create()->load($this->_getRequest()->getParam('website'))->getDefaultStore()->getId();
-            else
+            } elseif (strlen($this->_getRequest()->getParam('website'))) {
+                self::$_systemConfigStoreId = $this->storeWebsiteFactory->create()
+                    ->load($this->_getRequest()->getParam('website'))
+                    ->getDefaultStore()
+                    ->getId();
+            } else {
                 self::$_systemConfigStoreId = null;
+            }
         }
         return self::$_systemConfigStoreId;
     }
 
     public function isSingleMode()
     {
-        return $this->scopeConfig->getValue(Superb_Recommend_Helper_Api::XML_PATH_TRACKING_ACCOUNT_ID, \Magento\Store\Model\ScopeInterface::SCOPE_STORE,$this->getSystemConfigStoreId())==$this->scopeConfig->getValue(Superb_Recommend_Helper_Api::XML_PATH_TRACKING_ACCOUNT_ID, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            Superb_Recommend_Helper_Api::XML_PATH_TRACKING_ACCOUNT_ID,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getSystemConfigStoreId()
+        )==$this->scopeConfig->getValue(
+            Superb_Recommend_Helper_Api::XML_PATH_TRACKING_ACCOUNT_ID,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     public function isStoreMode()

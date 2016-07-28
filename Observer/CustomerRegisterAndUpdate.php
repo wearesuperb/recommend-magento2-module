@@ -53,23 +53,20 @@ class CustomerRegisterAndUpdate implements ObserverInterface
             try {
                 $data = $this->_helper->getCustomerRegistrationConfirmData($customer);
                 $this->_helper->setTrackingData($data);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
-        }
-        else {
+        } else {
             try {
                 $data = $this->_helper->getCustomerUpdateDetailsData($customer);
                 $this->_helper->setTrackingData($data);
                 $data = $this->_helper->getCustomerCustomData($customer);
-                if (count($data))
-                {
-                    foreach($data as $row)
-                    {
+                if (count($data)) {
+                    foreach ($data as $row) {
                         $this->_helper->setTrackingData($row);
                     }
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
         }

@@ -50,10 +50,9 @@ class SaveSystemConfig implements ObserverInterface
         $config = $observer->getEvent()->getConfig();
 
         $panelsBySlotsData = $this->_adminHelper->getSaveSlotSystemConfig();
-        $slotsData = array();
-        foreach($panelsBySlotsData as $slotId=>$panelId)
-        {
-            $slotsData[] = array('id'=>$slotId,'panel_id'=>$panelId);
+        $slotsData = [];
+        foreach ($panelsBySlotsData as $slotId => $panelId) {
+            $slotsData[] = ['id'=>$slotId,'panel_id'=>$panelId];
         }
 
         $this->_apiHelper->updateAccount($storeId);

@@ -96,7 +96,7 @@ class Block extends \Magento\Framework\View\Element\Template
         $this->_request = $context->getRequest();
         $this->_moduleManager = $moduleManager;
         $this->_pageCacheConfig = $pageCacheConfig;
-		$this->_isScopePrivate = $this->isFullPageCacheEnabled() && !$this->isVarnishEnabled();
+        $this->_isScopePrivate = $this->isFullPageCacheEnabled() && !$this->isVarnishEnabled();
         parent::__construct(
             $context,
             $data
@@ -116,33 +116,18 @@ class Block extends \Magento\Framework\View\Element\Template
     public function getTrackingData()
     {
         $data = $this->_helper->getTrackingData();
-        if ($this->_customerSession->isLoggedIn())
-        {
-            $data = (is_array($data)?$data:array());
-            array_unshift($data,array("setCustomerId",$this->_customerSession->getCustomerId()));
+        if ($this->_customerSession->isLoggedIn()) {
+            $data = is_array($data)?$data:[];
+            array_unshift($data, ["setCustomerId",$this->_customerSession->getCustomerId()]);
         }
         return $data;
     }
 
     public function checkLayerPage()
     {
-        if ($this->_catalogLayer!==false)
-        {
-            if (count($this->_catalogLayer->getState()->getFilters()))
-                $this->_helper->setTrackingData(array('disableRecommendationPanels'),true);
+        if ($this->_catalogLayer!==false && count($this->_catalogLayer->getState()->getFilters())) {
+            $this->_helper->setTrackingData(['disableRecommendationPanels'], true);
         }
-    }
-
-    /**
-     * Retrieve cookie value
-     *
-     * @param string $cookieName
-     * @param mixed $defaultValue
-     * @return string
-     */
-    protected function _getCookieValue($cookieName, $defaultValue = null)
-    {
-        return (array_key_exists($cookieName, $_COOKIE) ? $_COOKIE[$cookieName] : $defaultValue);
     }
 
     /**
@@ -178,13 +163,13 @@ class Block extends \Magento\Framework\View\Element\Template
      */
     public function canDisplay()
     {
-        return $this->_helper->isEnabled() && (!$this->isFullPageCacheEnabled() || $this->isVarnishEnabled() || 
-			!(
-				$this->_moduleManager->isEnabled('Magento_PageCache')
-				&& !$this->_request->isAjax()
-				&& $this->_layout->isCacheable()
-			)
-		);
+        return $this->_helper->isEnabled() && (!$this->isFullPageCacheEnabled() || $this->isVarnishEnabled() ||
+            !(
+                $this->_moduleManager->isEnabled('Magento_PageCache')
+                && !$this->_request->isAjax()
+                && $this->_layout->isCacheable()
+            )
+        );
     }
 
     /**

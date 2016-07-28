@@ -49,12 +49,11 @@ class DeleteSubscription implements ObserverInterface
             return $this;
         }
         $subscriber = $observer->getEvent()->getSubscriber();
-        if ($subscriber->getData('subscriber_status')==\Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED)
-        {
+        if ($subscriber->getData('subscriber_status')==\Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED) {
             try {
                 $data = $this->_helper->getCustomerUnsubscribeData($subscriber->getData('subscriber_email'));
                 $this->_helper->setTrackingData($data);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
         }

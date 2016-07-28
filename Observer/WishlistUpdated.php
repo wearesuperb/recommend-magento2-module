@@ -51,7 +51,7 @@ class WishlistUpdated implements ObserverInterface
         try {
             $data = $this->_helper->getWishlistUpdatedData();
             $this->_helper->setTrackingData($data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
         return $this;

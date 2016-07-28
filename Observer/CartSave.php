@@ -52,7 +52,7 @@ class CartSave implements ObserverInterface
         try {
             $data = $this->_helper->getCartStatusData($cart);
             $this->_helper->setTrackingData($data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
         return $this;

@@ -26,26 +26,27 @@ class Frequency extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSourc
     const CRON_EVERY_3_HOURS    = 'every3hours';
     const CRON_DAILY            = 'daily';
 
-    public function getAllOptions(){
-        if (is_null(self::$_staticOptions)){
-            self::$_staticOptions = array(
-                array(
+    public function getAllOptions()
+    {
+        if (self::$_staticOptions === null) {
+            self::$_staticOptions = [
+                [
                     'label' => __('Every 5 minutes'),
                     'value' => self::CRON_EVERY_5_MINUTES,
-                ),
-                array(
+                ],
+                [
                     'label' => __('Hourly'),
                     'value' => self::CRON_HOURLY,
-                ),
-                array(
+                ],
+                [
                     'label' => __('Every 3 hours'),
                     'value' => self::CRON_EVERY_3_HOURS,
-                ),
-                array(
+                ],
+                [
                     'label' => __('Daily'),
                     'value' => self::CRON_DAILY,
-                ),
-            );
+                ],
+            ];
         }
         return self::$_staticOptions;
     }

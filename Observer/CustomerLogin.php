@@ -52,14 +52,12 @@ class CustomerLogin implements ObserverInterface
             $data = $this->_helper->getCustomerLoginData();
             $this->_helper->setTrackingData($data);
             $data = $this->_helper->getCustomerCustomData();
-            if (count($data))
-            {
-                foreach($data as $row)
-                {
+            if (count($data)) {
+                foreach ($data as $row) {
                     $this->_helper->setTrackingData($row);
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
         return $this;

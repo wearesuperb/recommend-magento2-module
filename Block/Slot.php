@@ -30,27 +30,32 @@ class Slot extends \Magento\Framework\View\Element\Template
 
     public function getOptions()
     {
-        $options = array();
-        if ($this->getSlotPosition()!==false)
+        $options = [];
+        if ($this->getSlotPosition()!==false) {
             $options['slotPosition'] = $this->getSlotPosition();
-        if ($this->getPageType()!==false)
+        }
+        if ($this->getPageType()!==false) {
             $options['pageType'] = $this->getPageType();
-        if ($this->getPageTypePosition()!==false)
+        }
+        if ($this->getPageTypePosition()!==false) {
             $options['pageTypePosition'] = $this->getPageTypePosition();
-        if ($this->getDefaultPanelId()!==false)
+        }
+        if ($this->getDefaultPanelId()!==false) {
             $options['defaultPanelId'] = $this->getDefaultPanelId();
-        if (!is_null($this->getCallback()))
+        }
+        if ($this->getCallback() !== null) {
             $options['callback'] = self::CALLBACK_FUNCTION_NAME.$this->getCallback().self::CALLBACK_FUNCTION_NAME;
+        }
         return $options;
     }
     
     public function getJsonOptions()
     {
         return str_replace(
-            array(
+            [
                 '"'.self::CALLBACK_FUNCTION_NAME,
                 self::CALLBACK_FUNCTION_NAME.'"'
-            ),
+            ],
             '',
             json_encode($this->getOptions())
         );

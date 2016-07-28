@@ -51,8 +51,8 @@ class CategoryView implements ObserverInterface
         $category = $observer->getEvent()->getCategory();
         try {
             $data = $this->_helper->getCategoryViewData($category);
-            $this->_helper->setTrackingData($data,true);
-        } catch (Exception $e) {
+            $this->_helper->setTrackingData($data, true);
+        } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
         return $this;

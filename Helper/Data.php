@@ -180,7 +180,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_customerMetadataService;
 
     public function __construct(
-		\Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Newsletter\Model\SubscriberFactory $newsletterSubscriberFactory,
         \Magento\Eav\Model\Config $eavConfig,
@@ -206,7 +206,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Customer\Api\AccountManagementInterface $customerAccountManagement,
         \Magento\Customer\Api\CustomerMetadataInterface $customerMetadataService
     ) {
-		$this->_salesOrderCollection = $salesOrderCollection;
+        $this->_salesOrderCollection = $salesOrderCollection;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->itemRepository = $itemRepository;
@@ -236,23 +236,35 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getIsAdvancedModeEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(self::XML_PATH_ADVANCED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$this->scopeConfig->getValue(
+            self::XML_PATH_ADVANCED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     public function getThumbSource()
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_MEDIA_THUMB_SOURCE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_TRACKING_MEDIA_THUMB_SOURCE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     public function getThumbWidth()
     {
-        $width = $this->scopeConfig->getValue(self::XML_PATH_TRACKING_MEDIA_THUMB_WIDTH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $width = $this->scopeConfig->getValue(
+            self::XML_PATH_TRACKING_MEDIA_THUMB_WIDTH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return empty($width)?null:$width;
     }
 
     public function getThumbHeight()
     {
-        $height = $this->scopeConfig->getValue(self::XML_PATH_TRACKING_MEDIA_THUMB_HEIGHT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $height = $this->scopeConfig->getValue(
+            self::XML_PATH_TRACKING_MEDIA_THUMB_HEIGHT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return empty($height)?null:$height;
     }
 
@@ -266,56 +278,88 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return trim(preg_replace('/\s+/', ' ', $name));
     }
 
-    public function isEnabled($storeId=null)
+    public function isEnabled($storeId = null)
     {
-        return $this->scopeConfig->getValue( self::XML_PATH_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId );
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function isDashboardEnabled()
     {
-        return $this->scopeConfig->getValue( self::XML_PATH_DASHBOARD_ENABLED , \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_DASHBOARD_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
-    public function isDataCronEnabled($storeId=null)
+    public function isDataCronEnabled($storeId = null)
     {
-        return $this->scopeConfig->getValue( self::XML_PATH_DATA_CRON_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId );
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_DATA_CRON_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
-    public function isStatusCronEnabled($storeId=null)
+    public function isStatusCronEnabled($storeId = null)
     {
-        return $this->scopeConfig->getValue( self::XML_PATH_STATUS_CRON_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId );
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_STATUS_CRON_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function getAccountId()
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_ACCOUNT_ID, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_TRACKING_ACCOUNT_ID,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     public function getApiUrl()
     {
-        if ($this->storeManager->getStore()->isCurrentlySecure())
-            return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_URL_SECURE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-        else
-            return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_URL, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        if ($this->storeManager->getStore()->isCurrentlySecure()) {
+            return $this->scopeConfig->getValue(
+                self::XML_PATH_TRACKING_URL_SECURE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        } else {
+            return $this->scopeConfig->getValue(
+                self::XML_PATH_TRACKING_URL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        }
     }
 
     public function getApiJsUrl()
     {
-        if ($this->storeManager->getStore()->isCurrentlySecure())
-            return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_URL_SECURE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE).'trackerv12.js';
-        else
-            return $this->scopeConfig->getValue(self::XML_PATH_TRACKING_URL, \Magento\Store\Model\ScopeInterface::SCOPE_STORE).'trackerv12.js';
+        if ($this->storeManager->getStore()->isCurrentlySecure()) {
+            return $this->scopeConfig->getValue(
+                self::XML_PATH_TRACKING_URL_SECURE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ).'trackerv12.js';
+        } else {
+            return $this->scopeConfig->getValue(
+                self::XML_PATH_TRACKING_URL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ).'trackerv12.js';
+        }
     }
 
     public function getCurrentStoreCode()
     {
         return $this->storeManager->getStore()->getCode();
-	}
+    }
 
     public function getCurrentCurrencyCode()
     {
         return $this->storeManager->getStore()->getCurrentCurrencyCode();
-	}
+    }
 
     /**
      * Return the Customer given the customer Id stored in the session.
@@ -352,22 +396,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->subscription;
     }
 
-    public function getCustomerRegistrationConfirmData($customer=null)
+    public function getCustomerRegistrationConfirmData($customer = null)
     {
-        if (is_null($customer))
+        if ($customer === null) {
             $customer = $this->getCustomer();
-        $data = array(
+        }
+        $data = [
             'type'              => 'customer-registration',
             'title'             => $customer->getPrefix(),
             'firstname'         => $customer->getFirstname(),
             'lastname'          => $customer->getLastname(),
             'email'             => $customer->getEmail(),
             'email_subscribed'  => $this->getSubscriptionObject()->isSubscribed() ? 'yes' : 'no'
-        );
-        $data = array(
+        ];
+        $data = [
             'setEcommerceData',
             $data
-        );
+        ];
         return $this->_generateTrackingData($data);
     }
 
@@ -378,13 +423,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($defaultBilling = $this->_customerAccountManagement->getDefaultBillingAddress($customerId)) {
             return $defaultBilling->getTelephone();
         }
-	}
+    }
 
-    public function getCustomerUpdateDetailsData($customer=null)
+    public function getCustomerUpdateDetailsData($customer = null)
     {
-        if (is_null($customer))
+        if ($customer === null) {
             $customer = $this->getCustomer();
-        $data = array(
+        }
+        $data = [
             'type'              => 'customer-update',
             'title'             => $customer->getPrefix(),
             'firstname'         => $customer->getFirstname(),
@@ -392,19 +438,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             'email'             => $customer->getEmail(),
             'email_subscribed'  => $this->getSubscriptionObject()->isSubscribed() ? 'yes' : 'no',
             'mobile'            => $this->getPrimaryBillingAddressTelephone(),
-        );
-        $data = array(
+        ];
+        $data = [
             'setEcommerceData',
             $data
-        );
+        ];
         return  $this->_generateTrackingData($data);
     }
 
-    public function getCustomerLoginData($customer=null)
+    public function getCustomerLoginData($customer = null)
     {
-        if (is_null($customer))
+        if ($customer === null) {
             $customer = $this->getCustomer();
-        $data = array(
+        }
+        $data = [
             'type'              => 'login',
             'email'             => $customer->getEmail(),
             'customerId'        => $customer->getId(),
@@ -414,37 +461,37 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             'email'             => $customer->getEmail(),
             'email_subscribed'  => $this->getSubscriptionObject()->isSubscribed() ? 'yes' : 'no',
             'mobile'            => $this->getPrimaryBillingAddressTelephone(),
-        );
-        $data = array(
+        ];
+        $data = [
             'setEcommerceData',
             $data
-        );
+        ];
         return  $this->_generateTrackingData($data);
     }
 
-    public function getCustomerCustomData($customer=null)
+    public function getCustomerCustomData($customer = null)
     {
-        if (is_null($customer))
-        {
+        if ($customer === null) {
             $customer = $this->getCustomer();
         }
 
-        $data = array();
+        $data = [];
         $customerData = $customer->__toArray();
         $eavConfig = $this->eavConfig;
-        foreach ($this->getCustomerUpdateAttributes() as $row)
-        {
+        foreach ($this->getCustomerUpdateAttributes() as $row) {
             $attribute = $eavConfig->getAttribute('customer', $row['magento_attribute']);
-            if ($attribute && $attribute->getId() && isset($customerData[$attribute->getAttributeCode()]) && isset($row['recommend_attribute']))
-            {
+            if ($attribute && $attribute->getId() &&
+                isset($customerData[$attribute->getAttributeCode()]) &&
+                isset($row['recommend_attribute'])
+            ) {
                 $_attributeText = $attribute->getSource()->getOptionText(
                     $customerData[$attribute->getAttributeCode()]
                 );
-                $data[] = $this->_generateTrackingData(array(
+                $data[] = $this->_generateTrackingData([
                     'setCustomerCustomVar',
                     $row['recommend_attribute'],
                     empty($_attributeText)?$customerData[$attribute->getAttributeCode()]:$_attributeText
-                ));
+                ]);
             }
         }
         return  $data;
@@ -452,10 +499,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     protected function getCategoryPathName($_category)
     {
-        if (is_null($_category))
+        if ($_category === null) {
             $_category = $this->_registry->registry('current_category');
+        }
 
-        $categoriesPath = array();
+        $categoriesPath = [];
         if ($_category) {
             $pathInStore = $_category->getPathInStore();
             $pathIds = array_reverse(explode(',', $pathInStore));
@@ -469,128 +517,148 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 }
             }
         }
-        return implode('/',$categoriesPath);
+        return implode('/', $categoriesPath);
     }
 
     public function getProductUpdateAttributes()
     {
-        $attributes = @unserialize((string)$this->scopeConfig->getValue(self::XML_PATH_TRACKING_PRODUCT_ATTRIBUTES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
+        $attributes = @unserialize((string)$this->scopeConfig->getValue(
+            self::XML_PATH_TRACKING_PRODUCT_ATTRIBUTES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ));
         return is_array($attributes)?$attributes:[];
     }
 
     public function getCustomerUpdateAttributes()
     {
-        $attributes = @unserialize((string)$this->scopeConfig->getValue(self::XML_PATH_TRACKING_CUSTOMER_ATTRIBUTES, \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
+        $attributes = @unserialize((string)$this->scopeConfig->getValue(
+            self::XML_PATH_TRACKING_CUSTOMER_ATTRIBUTES,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ));
         return is_array($attributes)?$attributes:[];
     }
 
-    public function getProductViewData($_product=null,$_currentCategory=null)
+    public function getProductViewData($_product = null, $_currentCategory = null)
     {
-        if (is_null($_currentCategory))
+        if ($_currentCategory === null) {
             $_currentCategory = $this->_registry->registry('current_category');
-
-        if (is_null($_product))
-            $_product = $this->_registry->registry('current_product');
-
-        $categories = array();
-        foreach ($_product->getCategoryCollection() as $_category) {
-            $categoryPathName = $this->getCategoryPathName($_category);
-            if (!empty($categoryPathName)) $categories[] = $this->normalizeName($categoryPathName);
         }
 
-        $additionalAttributes = array();
+        if ($_product === null) {
+            $_product = $this->_registry->registry('current_product');
+        }
+
+        $categories = [];
+        foreach ($_product->getCategoryCollection() as $_category) {
+            $categoryPathName = $this->getCategoryPathName($_category);
+            if (!empty($categoryPathName)) {
+                $categories[] = $this->normalizeName($categoryPathName);
+            }
+        }
+
+        $additionalAttributes = [];
         $eavConfig = $this->eavConfig;
-        foreach ($this->getProductUpdateAttributes() as $row)
-        {
+        foreach ($this->getProductUpdateAttributes() as $row) {
             $attribute = $eavConfig->getAttribute('catalog_product', $row['magento_attribute']);
-            if ($attribute && $attribute->getId() && isset($row['recommend_attribute']))
-            {
+            if ($attribute && $attribute->getId() && isset($row['recommend_attribute'])) {
                 $_attributeText = $_product->getAttributeText($attribute->getAttributeCode());
-                $additionalAttributes[$row['recommend_attribute']] = empty($_attributeText)?$_product->getData($attribute->getAttributeCode()):$_attributeText;
-                if (is_array($additionalAttributes[$row['recommend_attribute']]))
-                {
-                    $additionalAttributes[$row['recommend_attribute']] = implode(', ',$additionalAttributes[$row['recommend_attribute']]);
+
+                $additionalAttributes[$row['recommend_attribute']] =
+                    empty($_attributeText) ? $_product->getData($attribute->getAttributeCode()):$_attributeText;
+
+                if (is_array($additionalAttributes[$row['recommend_attribute']])) {
+                    $additionalAttributes[$row['recommend_attribute']] = implode(
+                        ', ',
+                        $additionalAttributes[$row['recommend_attribute']]
+                    );
                 }
             }
         }
 
-		$_price = $_product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
-		$_finalPrice = $_product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+        $_price = $_product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
+        $_finalPrice = $_product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
 
         $attributes = [
-			'type' => $this->getThumbSource(),
-			'width' => $this->getThumbWidth(),
-			'height' => $this->getThumbHeight()
+            'type' => $this->getThumbSource(),
+            'width' => $this->getThumbWidth(),
+            'height' => $this->getThumbHeight()
         ];
         $imageUrl = (string)$this->catalogImageHelper->init($_product, null, $attributes)->getUrl();
-        $secureImageUrl = str_replace($this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA,false),$this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA,true),$imageUrl);
-        $data = array(
+        $secureImageUrl = str_replace(
+            $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, false),
+            $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, true),
+            $imageUrl
+        );
+        $data = [
             'setEcommerceData',
-            array(
+            [
                 'type'                  => 'product-view',
                 'name'                  => $this->normalizeName($_product->getName()),
                 'sku'                   => $_product->getSku(),
                 'image'                 => $imageUrl,
                 'secure_image'          => $secureImageUrl,
-                'url'                   => $_product->getUrlModel()->getUrl($_product, array('_ignore_category'=>true)),
+                'url'                   => $_product->getUrlModel()->getUrl($_product, ['_ignore_category'=>true]),
                 'categories'            => $categories,
                 'price'                 => $this->_pricingHelper->currency($_finalPrice, false, false),
-                'original_price'        => $this->_pricingHelper->currency($_price,false,false),
+                'original_price'        => $this->_pricingHelper->currency($_price, false, false),
                 'additional_attributes' => $additionalAttributes
-            )
-        );
-        if (is_object($_currentCategory))
+            ]
+        ];
+        if (is_object($_currentCategory)) {
             $data[1]['current_category'] = $this->normalizeName($this->getCategoryPathName($_currentCategory));
+        }
         return  $this->_generateTrackingData($data);
     }
 
-    public function getCategoryViewData($_category=null)
+    public function getCategoryViewData($_category = null)
     {
-        if (is_null($_category))
+        if ($_category === null) {
             $_category = $this->_registry->registry('current_category');
+        }
 
-        $data = array(
+        $data = [
             'setEcommerceData',
-            array(
+            [
                 'type'          => 'category-view',
                 'name'          => $this->normalizeName($this->getCategoryPathName($_category)),
                 'url'           => $this->_urlBuilder->getCurrentUrl()
-            )
-        );
+            ]
+        ];
         return  $this->_generateTrackingData($data);
     }
 
-    public function getCartStatusData($_cart=null)
+    public function getCartStatusData($_cart = null)
     {
-        if (is_null($_cart))
+        if ($_cart === null) {
             $_cart = $this->checkoutCart;
-        if (!(int)$_cart->getQuote()->getId())
+        }
+        if (!(int)$_cart->getQuote()->getId()) {
             return [];
+        }
 
         $_items = $this->itemRepository->getList($_cart->getQuote()->getId());
-        $data = array(
+        $data = [
             'type'          => 'cart-update',
-            'grand-total'   => sprintf('%01.2f',$_cart->getQuote()->getGrandTotal()),
+            'grand-total'   => sprintf('%01.2f', $_cart->getQuote()->getGrandTotal()),
             'total-qty'     => (int)$_cart->getSummaryQty(),
-            'products'      => array()
-        );
-        foreach($_items as $_item)
-        {
+            'products'      => []
+        ];
+        foreach ($_items as $_item) {
             $allData = $this->itemPool->getItemData($_item);
-            $itemData = array();
+            $itemData = [];
             $itemData['product-name']  = $this->normalizeName($allData['product_name']);
             $itemData['product-sku']  = $_item->getProduct()->getData('sku');
             $itemData['product-image'] = $allData['product_image']['src'];
             $itemData['product-url']  = $allData['product_url'];
             $itemData['product-qty']  = $allData['qty'];
-            $itemData['product-price']  = sprintf('%01.2f',$this->checkoutHelper->getPriceInclTax($_item));
-            $itemData['product-total-val']  = sprintf('%01.2f',$this->checkoutHelper->getSubtotalInclTax($_item));
+            $itemData['product-price']  = sprintf('%01.2f', $this->checkoutHelper->getPriceInclTax($_item));
+            $itemData['product-total-val']  = sprintf('%01.2f', $this->checkoutHelper->getSubtotalInclTax($_item));
             $data['products'][] = $itemData;
         }
-        $data = array(
+        $data = [
             'setEcommerceData',
             $data
-        );
+        ];
         return  $this->_generateTrackingData($data);
     }
 
@@ -598,50 +666,53 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $_wishlist = $this->wishlistHelper->getWishlist();
         $_items = $_wishlist->getItemCollection();
-        $data = array(
+        $data = [
             'type'      => 'wishlist-update',
-            'products'  => array()
-        );
-        foreach($_items as $_item)
-        {
-            $itemData = array();
+            'products'  => []
+        ];
+        foreach ($_items as $_item) {
+            $itemData = [];
             $itemData['product-name']  = $this->normalizeName($_item->getProduct()->getName());
             $itemData['product-sku']  = $_item->getProduct()->getData('sku');
             $data['products'][] = $itemData;
         }
-        $data = array(
+        $data = [
             'setEcommerceData',
             $data
-        );
+        ];
         return  $this->_generateTrackingData($data);
     }
 
     public function getCustomerUnsubscribeData($email)
     {
-        $customer = $this->customerCustomerFactory->create()->setWebsiteId($this->storeManager->getWebsite()->getId())->loadByEmail($email);
-        $data = array(
+        $customer = $this->customerCustomerFactory->create()
+            ->setWebsiteId($this->storeManager->getWebsite()->getId())
+            ->loadByEmail($email);
+        $data = [
             'type'      => 'unsubscribe',
             'email'     => $email,
             'customerId'=> $customer && $customer->getId()?$customer->getId():''
-        );
-        $data = array(
+        ];
+        $data = [
             'setEcommerceData',
             $data
-        );
+        ];
         return  $this->_generateTrackingData($data);
     }
 
     public function getCustomerSubscribeData($email)
     {
-        $customer = $this->customerCustomerFactory->create()->setWebsiteId($this->storeManager->getWebsite()->getId())->loadByEmail($email);
-        $data = array(
+        $customer = $this->customerCustomerFactory->create()
+            ->setWebsiteId($this->storeManager->getWebsite()->getId())
+            ->loadByEmail($email);
+        $data = [
             'type'          => 'subscribe',
             'email'         => $email
-        );
-        $data = array(
+        ];
+        $data = [
             'setEcommerceData',
             $data
-        );
+        ];
         return  $this->_generateTrackingData($data);
     }
 
@@ -656,93 +727,93 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         
         $ordersData = [];
         foreach ($collection as $order) {
-			$_items = $order->getAllVisibleItems();
-			$data = array(
-				'type'              => 'sale',
-				'sale-qty'          => '',
-				'email'             => $order->getCustomerEmail(),
-				'firstname'         => $order->getCustomerFirstname(),
-				'lastname'          => $order->getCustomerLastname(),
-				'sale-grand-total'  => $order->getBaseGrandTotal(),
-				'sale-tax'          => $order->getBaseTaxAmount(),
-				'sale-delivery'     => $order->getBaseShippingAmount(),
-				'sale-ref'          => $order->getIncrementId(),
-				'sale-currency'     => $order->getBaseCurrencyCode(),
-				'products'  		=> []
-			);
-			$_qtyOrdered = 0;
-			foreach($_items as $_item)
-			{
-				$_qtyOrdered += $_item->getQtyOrdered();
-				$itemData = array();
-				$itemData['sale-product-name'] = $this->normalizeName($_item->getName());
-				$itemData['sale-product-sku'] = $_item->getProduct()->getSku();//$_item->getProductOptionByCode('recommend-product-view-sku');
-				$itemData['sale-product-qty']  = $_item->getQtyOrdered();
-				$itemData['sale-product-val']  = sprintf('%.2f', $_item->getBasePriceInclTax());
-				$data['products'][] = $itemData;
-			}
-			$data['sale-qty'] = $_qtyOrdered;
-			$data = array(
-				'setEcommerceData',
-				$data
-			);
-			;
-			$ordersData[] = $this->_generateTrackingData($data);
-		}
+            $_items = $order->getAllVisibleItems();
+            $data = [
+                'type'              => 'sale',
+                'sale-qty'          => '',
+                'email'             => $order->getCustomerEmail(),
+                'firstname'         => $order->getCustomerFirstname(),
+                'lastname'          => $order->getCustomerLastname(),
+                'sale-grand-total'  => $order->getBaseGrandTotal(),
+                'sale-tax'          => $order->getBaseTaxAmount(),
+                'sale-delivery'     => $order->getBaseShippingAmount(),
+                'sale-ref'          => $order->getIncrementId(),
+                'sale-currency'     => $order->getBaseCurrencyCode(),
+                'products'          => []
+            ];
+            $_qtyOrdered = 0;
+            foreach ($_items as $_item) {
+                $_qtyOrdered += $_item->getQtyOrdered();
+                $itemData = [];
+                $itemData['sale-product-name'] = $this->normalizeName($_item->getName());
+                $itemData['sale-product-sku'] = $_item->getProduct()->getSku();
+                $itemData['sale-product-qty']  = $_item->getQtyOrdered();
+                $itemData['sale-product-val']  = sprintf('%.2f', $_item->getBasePriceInclTax());
+                $data['products'][] = $itemData;
+            }
+            $data['sale-qty'] = $_qtyOrdered;
+            $data = [
+                'setEcommerceData',
+                $data
+            ];
+            $ordersData[] = $this->_generateTrackingData($data);
+        }
         return $ordersData;
     }
 
     public function processCheckoutPage()
     {
-        $data = array(
+        $data = [
             'type'              => 'checkout-view',
-        );
-        $data = array(
+        ];
+        $data = [
             'setEcommerceData',
             $data
-        );
+        ];
         return  $this->_generateTrackingData($data);
     }
 
-    public function setTrackingData($record,$static=false)
+    public function setTrackingData($record, $static = false)
     {
-        if ($static)
+        if ($static) {
             $data = $this->getStaticTrackingData();
-        else
+        } else {
             $data = $this->_session->getTrackingData();
-        if (is_array($record))
+        }
+        if (is_array($record)) {
             $data[] = $record;
-        else
-            $data = array($record);
-        if ($static)
+        } else {
+            $data = [$record];
+        }
+        if ($static) {
             $this->setStaticTrackingData($data);
-        else
-        {
+        } else {
             $this->_session->setTrackingData($data);
             $this->setDataExistsCookie('1');
         }
     }
 
-    public function getTrackingData($clear=true,$static=false)
+    public function getTrackingData($clear = true, $static = false)
     {
-        if ($static)
+        if ($static) {
             $data = $this->getStaticTrackingData();
-        else
+        } else {
             $data = $this->_session->getTrackingData();
-        if ($clear)
-        {
-            if ($static)
-                $this->setStaticTrackingData(array());
-            else
-                $this->_session->setTrackingData(array());
+        }
+        if ($clear) {
+            if ($static) {
+                $this->setStaticTrackingData([]);
+            } else {
+                $this->_session->setTrackingData([]);
+            }
         }
         return $data;
     }
 
     public function getStaticTrackingData()
     {
-        if (!is_array(self::$_staticData)){
-            return array();
+        if (!is_array(self::$_staticData)) {
+            return [];
         }
         return self::$_staticData;
     }

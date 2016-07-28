@@ -52,11 +52,10 @@ class SetOnOrderSuccessPageViewObserver implements ObserverInterface
         $orderIds = $observer->getEvent()->getOrderIds();
         try {
             $ordersData = $this->_helper->getOrdersData($orderIds);
-            foreach($ordersData as $orderData)
-            {
+            foreach ($ordersData as $orderData) {
                 $this->_helper->setTrackingData($orderData);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
         return $this;
