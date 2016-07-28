@@ -31,20 +31,13 @@ class Cron extends \Magento\Framework\App\Config\Value
         \Superb\Recommend\Model\System\Config\Source\Cron\Frequency::CRON_DAILY=>'1 5 * * *'
     );
 
-    /**
-     * @var \Magento\Framework\App\Config\ValueFactory
-     */
-    protected $configValueFactory;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
+    /** @var \Magento\Framework\App\Config\ValueFactory */
+    protected $_configValueFactory;
 
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -52,17 +45,8 @@ class Cron extends \Magento\Framework\App\Config\Value
         $runModelPath = '',
         array $data = []
     ) {
-        $this->configValueFactory = $configValueFactory;
-        $this->scopeConfig = $scopeConfig;
-        parent::__construct(
-            $context,
-            $registry,
-            $scopeConfig,
-            $cacheTypeList,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        $this->_configValueFactory = $configValueFactory;
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
 
@@ -74,13 +58,13 @@ class Cron extends \Magento\Framework\App\Config\Value
     {
         try {
             if (isset($this->_cronExprToFrequncy[$this->getValue()]) && isset($this->_pathToPath[$this->getPath()]))
-                $this->configValueFactory->create()
+                $this->_configValueFactory->create()
                     ->load($this->_pathToPath[$this->getPath()], 'path')
                     ->setValue($this->_cronExprToFrequncy[$this->getValue()])
                     ->setPath($this->_pathToPath[$this->getPath()])
                     ->save();
         } catch (\Exception $e) {
-            throw new \Exception(__('We can\'t save the cron expression.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t save the Cron expression.'));
         }
         return parent::afterSave();
     }
