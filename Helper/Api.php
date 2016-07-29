@@ -162,9 +162,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
             (time()>$this->_tokenData[$storeId]['expires_date']))
         ) {
             try {
-                $responseBody = curl_exec($ch);
-                $tokenData = @json_decode($responseBody, true);
-                $this->_initApiCall(
+                $tokenData = $this->_callApi(
                     $this->_getGetTokenUrl($storeId),
                     [
                         'key'=>$this->_encryptor->decrypt(
@@ -177,7 +175,6 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                     ],
                     true
                 );
-                $this->_callApiCall();
                 if (isset($tokenData['success']) && $tokenData['success']==true) {
                     $this->_tokenData[$storeId] = $tokenData['token'];
                 }
@@ -196,8 +193,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function uploadProductsData($products, $storeId = null)
     {
         try {
-            $this->_initApiCall($this->_getUploadProductsDataUrl($storeId), ['products'=>$products]);
-            $this->_callApiCall();
+            $response = $this->_callApi($this->_getUploadProductsDataUrl($storeId), ['products'=>$products]);
         } catch (\Exception $e) {
             $this->logger->critical($e);
         }
@@ -206,8 +202,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function getProductsPageviewsData($hours, $storeId = null)
     {
         try {
-            $this->_initApiCall($this->_getGetProductsPageviewsDataUrl($storeId), ['hours'=>$hours]);
-            $response = $this->_callApiCall();
+            $response = $this->_callApi($this->_getGetProductsPageviewsDataUrl($storeId), ['hours'=>$hours]);
             if (isset($response['success']) && $response['success']==true &&
                 isset($response['products']) && is_array($response['products'])
             ) {
@@ -222,8 +217,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function getSlotsPageTypesData($storeId = null)
     {
         try {
-            $this->_initApiCall($this->_getGetSlotsPageTypesDataUrl($storeId));
-            $response = $this->_callApiCall();
+            $response = $this->_callApi($this->_getGetSlotsPageTypesDataUrl($storeId));
             if (isset($response['success']) && $response['success']==true &&
                 isset($response['results']) && is_array($response['results'])
             ) {
@@ -238,8 +232,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function getSlotsData($storeId = null)
     {
         try {
-            $this->_initApiCall($this->_getGetSlotsDataUrl($storeId));
-            $response = $this->_callApiCall();
+            $response = $this->_callApi($this->_getGetSlotsDataUrl($storeId));
             if (isset($response['success']) && $response['success']==true &&
                 isset($response['results']) && is_array($response['results'])
             ) {
@@ -254,8 +247,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function updateSlots($slotsData, $storeId = null)
     {
         try {
-            $this->_initApiCall($this->_getUpdateSlotsUrl($storeId), ['slots'=>$slotsData]);
-            $response = $this->_callApiCall();
+            $response = $this->_callApi($this->_getUpdateSlotsUrl($storeId), ['slots'=>$slotsData]);
             if (isset($response['success']) && $response['success']==true) {
                 return true;
             }
@@ -267,8 +259,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function getPanelsListData($storeId = null)
     {
         try {
-            $this->_initApiCall($this->_getGetPanelsListDataUrl($storeId));
-            $response = $this->_callApiCall();
+            $response = $this->_callApi($this->_getGetPanelsListDataUrl($storeId));
             if (isset($response['success']) && $response['success']==true &&
                 isset($response['results']) && is_array($response['results'])
             ) {
@@ -283,8 +274,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function getProductAttributesListData($storeId = null)
     {
         try {
-            $this->_initApiCall($this->_getGetProductAttributesListDataUrl($storeId));
-            $response = $this->_callApiCall();
+            $response = $this->_callApi($this->_getGetProductAttributesListDataUrl($storeId));
             if (isset($response['success']) && $response['success']==true &&
                 isset($response['results']) && is_array($response['results'])
             ) {
@@ -299,8 +289,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCustomerAttributesListData($storeId = null)
     {
         try {
-            $this->_initApiCall($this->_getGetCustomerAttributesListDataUrl($storeId));
-            $response = $this->_callApiCall();
+            $response = $this->_callApi($this->_getGetCustomerAttributesListDataUrl($storeId));
             if (isset($response['success']) && $response['success']==true &&
                 isset($response['results']) && is_array($response['results'])
             ) {
@@ -315,7 +304,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     public function updateAccount($storeId = null)
     {
         try {
-            $this->_initApiCall(
+            $response = $this->_callApi(
                 $this->_getUpdateAccountUrl($storeId),
                 [
                     'currency'=>$this->storeManager->getStore($storeId)->getBaseCurrencyCode(),
@@ -323,7 +312,6 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                     'platform_version'=>$this->productMetadata->getVersion()
                 ]
             );
-            $response = $this->_callApiCall();
             if (isset($response['success']) && $response['success']==true) {
                 return true;
             } elseif (isset($response['error']) && $response['error']==true &&
@@ -353,7 +341,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
-    protected function _initApiCall($url, $post = null, $isAuthTokenRequest = false, $headers = [])
+    protected function _callApi($url, $post = null, $isAuthTokenRequest = false, $headers = [])
     {
         $this->_ch = curl_init();
         curl_setopt($this->_ch, CURLOPT_URL, $url);
@@ -369,10 +357,6 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         }
         curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, 1);
-    }
-
-    protected function _callApiCall()
-    {
         $responseBody = curl_exec($this->_ch);
         curl_close($this->_ch);
         return @json_decode($responseBody, true);
