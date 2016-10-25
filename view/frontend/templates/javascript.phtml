@@ -15,6 +15,9 @@
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 ?>
+<?php
+$_cacheHelper = $this->helper('Superb\Recommend\Helper\Cache');
+if ($_cacheHelper->isFullPageCacheEnabled() && !$_cacheHelper->isVarnishEnabled()):?>
 <script type="text/x-magento-init">
     {
         "body": {
@@ -22,3 +25,4 @@
         }
     }
 </script>
+<?php endif;?>

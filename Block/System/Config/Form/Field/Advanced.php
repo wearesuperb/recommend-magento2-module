@@ -20,15 +20,16 @@ namespace Superb\Recommend\Block\System\Config\Form\Field;
 class Advanced extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \Superb\Recommend\Helper\Data
      */
-    protected $_scopeConfig;
+    protected $_helper;
 
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
+        \Superb\Recommend\Helper\Data $helper,
         array $data = []
     ) {
-        $this->_scopeConfig = $context->getScopeConfig();
+        $this->_helper = $helper;
         parent::__construct(
             $context,
             $data
@@ -37,6 +38,6 @@ class Advanced extends \Magento\Config\Block\System\Config\Form\Field
 
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        return $this->_scopeConfig->getValue(\Superb\Recommend\Helper\Data::XML_PATH_ADVANCED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)?parent::render($element):'';
+        return $this->_helper->getIsAdvancedModeEnabled()?parent::render($element):'';
     }
 }

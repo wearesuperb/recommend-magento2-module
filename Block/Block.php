@@ -41,6 +41,11 @@ class Block extends \Magento\Framework\View\Element\Template
     protected $_helper;
 
     /**
+     * @var \Superb\Recommend\Helper\Cache
+     */
+    protected $_cacheHelper;
+
+    /**
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
@@ -55,27 +60,6 @@ class Block extends \Magento\Framework\View\Element\Template
      */
     protected $_layout;
 
-    /**
-     * Is varnish enabled flag
-     *
-     * @var bool
-     */
-    protected $isVarnishEnabled;
-
-    /**
-     * Is full page cache enabled flag
-     *
-     * @var bool
-     */
-    protected $isFullPageCacheEnabled;
-
-    /**
-     * Application config object
-     *
-     * @var \Magento\PageCache\Model\Config
-     */
-    protected $_pageCacheConfig;
-
     protected $_isScopePrivate = true;
 
     public function __construct(
@@ -84,8 +68,8 @@ class Block extends \Magento\Framework\View\Element\Template
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Superb\Recommend\Helper\Data $helper,
+        \Superb\Recommend\Helper\Cache $cacheHelper,
         ModuleManager $moduleManager,
-        \Magento\PageCache\Model\Config $pageCacheConfig,
         array $data = []
     ) {
         $this->_customerSession = $customerSession;
@@ -93,10 +77,10 @@ class Block extends \Magento\Framework\View\Element\Template
         $this->_catalogLayer = $layerResolver->get();
         $this->_layout = $context->getLayout();
         $this->_helper = $helper;
+        $this->_cacheHelper = $cacheHelper;
         $this->_request = $context->getRequest();
         $this->_moduleManager = $moduleManager;
-        $this->_pageCacheConfig = $pageCacheConfig;
-        $this->_isScopePrivate = $this->isFullPageCacheEnabled() && !$this->isVarnishEnabled();
+        $this->_isScopePrivate = $this->_cacheHelper->isFullPageCacheEnabled() && !$this->_cacheHelper->isVarnishEnabled();
         parent::__construct(
             $context,
             $data
@@ -131,39 +115,13 @@ class Block extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Is full page cache enabled
-     *
-     * @return bool
-     */
-    protected function isFullPageCacheEnabled()
-    {
-        if ($this->isFullPageCacheEnabled === null) {
-            $this->isFullPageCacheEnabled = $this->_pageCacheConfig->isEnabled();
-        }
-        return $this->isFullPageCacheEnabled;
-    }
-
-    /**
-     * Is varnish cache engine enabled
-     *
-     * @return bool
-     */
-    protected function isVarnishEnabled()
-    {
-        if ($this->isVarnishEnabled === null) {
-            $this->isVarnishEnabled = ($this->_pageCacheConfig->getType() == \Magento\PageCache\Model\Config::VARNISH);
-        }
-        return $this->isVarnishEnabled;
-    }
-
-    /**
      * Check whether the block can be displayed
      *
      * @return bool
      */
     public function canDisplay()
     {
-        return $this->_helper->isEnabled() && (!$this->isFullPageCacheEnabled() || $this->isVarnishEnabled() ||
+        return $this->_helper->isEnabled() && (!$this->_cacheHelper->isFullPageCacheEnabled() || $this->_cacheHelper->isVarnishEnabled() ||
             !(
                 $this->_moduleManager->isEnabled('Magento_PageCache')
                 && !$this->_request->isAjax()

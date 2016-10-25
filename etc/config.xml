@@ -21,7 +21,7 @@
                 <server_url>http://tracking.recommend.pro/</server_url>
                 <server_secure_url>https://tracking.recommend.pro/</server_secure_url>
                 <api_url>https://api.recommend.pro/</api_url>
-                <advanced>1</advanced>
+                <advanced>0</advanced>
             </general_settings>
             <panels>
                 <media_thumb_source>small_image</media_thumb_source>

@@ -20,17 +20,18 @@ namespace Superb\Recommend\Block\System\Config\Form\Fieldset;
 class Advanced extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \Superb\Recommend\Helper\Data
      */
-    protected $_scopeConfig;
+    protected $_helper;
 
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\View\Helper\Js $jsHelper,
+        \Superb\Recommend\Helper\Data $helper,
         array $data = []
     ) {
-        $this->_scopeConfig = $context->getScopeConfig();
+        $this->_helper = $helper;
         parent::__construct(
             $context,
             $authSession,
@@ -41,6 +42,6 @@ class Advanced extends \Magento\Config\Block\System\Config\Form\Fieldset
 
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        return $this->_scopeConfig->getValue(\Superb\Recommend\Helper\Data::XML_PATH_ADVANCED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)?parent::render($element):'';
+        return $this->_helper->getIsAdvancedModeEnabled()?parent::render($element):'';
     }
 }

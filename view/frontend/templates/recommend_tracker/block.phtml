@@ -21,6 +21,5 @@
 <?php if (is_array($data)):?><?php foreach ($data as $record): if (is_array($record) && count($record)):?>
 _taq.push(<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($record);?>);
 <?php endif; endforeach; endif; ?>
-_taq.push(["trackPageview"]);
 </script>
 <?php // <!-- dynamic tags} --> ?>
