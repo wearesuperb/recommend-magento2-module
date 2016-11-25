@@ -27,7 +27,8 @@ class UpdateProductsStatus extends CronAbstract
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogInventory\Helper\Stock $catalogInventoryStockHelper,
-        \Superb\Recommend\Helper\Api $apiHelper
+        \Superb\Recommend\Helper\Data $helper,
+        \Superb\Recommend\Helper\Api $apiHelper,
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
@@ -36,6 +37,7 @@ class UpdateProductsStatus extends CronAbstract
         $this->catalogProductVisibility = $catalogProductVisibility;
         $this->_catalogInventoryStockHelper = $catalogInventoryStockHelper;
         $this->_logger = $logger;
+        $this->_helper = $helper;
         $this->_apiHelper = $apiHelper;
         $this->_isCronTypeEnabledXmlPath = \Superb\Recommend\Helper\Data::XML_PATH_STATUS_CRON_ENABLED;
     }

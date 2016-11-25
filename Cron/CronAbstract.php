@@ -25,6 +25,11 @@ abstract class CronAbstract
     protected $_logger;
 
     /**
+     * @var \Superb\Recommend\Helper\Data
+     */
+    protected $_helper;
+
+    /**
      * @var \Superb\Recommend\Helper\Api
      */
     protected $_apiHelper;
@@ -70,18 +75,10 @@ abstract class CronAbstract
     {
         $storesByAccounts = [];
         foreach ($this->storeManager->getStores() as $store) {
-            if (!$this->scopeConfig->getValue(
-                \Superb\Recommend\Helper\Data::XML_PATH_ENABLED,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store->getId()
-            )) {
+            if (!$this->_helper->isEnabled($store->getId())) {
                 continue;
             }
-            $accountId = $this->scopeConfig->getValue(
-                \Superb\Recommend\Helper\Api::XML_PATH_TRACKING_ACCOUNT_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store->getId()
-            );
+            $accountId = $this->_helper->getAccountId($store->getId());
             if (!isset($storesByAccounts[$accountId])) {
                 $storesByAccounts[$accountId] = [];
             }
@@ -92,10 +89,7 @@ abstract class CronAbstract
     
     public function execute(\Magento\Cron\Model\Schedule $schedule)
     {
-        if (!$this->scopeConfig->getValue(
-            \Superb\Recommend\Helper\Data::XML_PATH_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )) {
+        if (!$this->_helper->isEnabled()) {
             return $this;
         }
         if (!$this->scopeConfig->getValue(
@@ -109,18 +103,10 @@ abstract class CronAbstract
             $this->storeManager->setCurrentStore('admin');
             $storesByAccounts = $this->getStoresByAccounts();
             foreach ($this->storeManager->getStores() as $store) {
-                if (!$this->scopeConfig->getValue(
-                    \Superb\Recommend\Helper\Data::XML_PATH_ENABLED,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $store->getId()
-                )) {
+                if (!$this->_helper->isEnabled($store->getId())) {
                     continue;
                 }
-                $accountId = $this->scopeConfig->getValue(
-                    \Superb\Recommend\Helper\Api::XML_PATH_TRACKING_ACCOUNT_ID,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $store->getId()
-                );
+                $accountId = $this->_helper->getAccountId($store->getId());
                 $this->storeManager->setCurrentStore($store);
                 $this->_resetCurrentStoreData();
                 $collection = $this->productCollectionFactory->create();

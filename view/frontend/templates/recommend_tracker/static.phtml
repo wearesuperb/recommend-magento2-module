@@ -16,13 +16,14 @@
  */
 ?>
 <?php $helper = $this->helper('Superb\Recommend\Helper\Data'); ?>
+<?php $trackerHelper = $this->helper('Superb\Recommend\Helper\Tracker'); ?>
 <script>
     (function(){
-    var tracker = document.createElement('script'); tracker.type = 'text/javascript'; tracker.async = true;tracker.src = <?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($helper->getApiJsUrl());?>;
+    var tracker = document.createElement('script'); tracker.type = 'text/javascript'; tracker.async = true;tracker.src = <?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($trackerHelper->getApiJsUrl());?>;
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(tracker, s);
     })();
     var _taq = _taq || [];
-    _taq.push(["setAccountId", <?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($helper->getAccountId());?>] ,["setTrackerUrl",<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($helper->getApiUrl());?>], ["setCurrentCurrencyCode",<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($helper->getCurrentCurrencyCode());?>], ["setCurrentStoreCode",<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($helper->getCurrentStoreCode());?>]);
+    _taq.push(["setAccountId", <?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($helper->getAccountId());?>] ,["setTrackerUrl",<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($trackerHelper->getApiUrl());?>], ["setCurrentCurrencyCode",<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($trackerHelper->getCurrentCurrencyCode());?>], ["setCurrentStoreCode",<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($trackerHelper->getCurrentStoreCode());?>]);
     _taq.push(["trackBeforeRecommendMode",true]);
     <?php $data = $this->getTrackingData();?>
     <?php if (is_array($data)):?><?php foreach ($data as $record): if (is_array($record) && count($record)):?>

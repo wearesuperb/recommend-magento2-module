@@ -20,15 +20,17 @@ use Magento\Framework\AppInterface;
 
 class Api extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_ENABLED                          = 'superbrecommend/general_settings/enabled';
-    const XML_PATH_TRACKING_ACCOUNT_ID              = 'superbrecommend/general_settings/account_id';
     const XML_PATH_API_URL                          = 'superbrecommend/general_settings/api_url';
-    const XML_PATH_API_USERNAME                     = 'superbrecommend/api_settings/username';
     const XML_PATH_API_KEY                          = 'superbrecommend/general_settings/api_key';
     const XML_PATH_API_ACCESS_TOKEN                 = 'superbrecommend/general_settings/api_access_token';
     const XML_PATH_API_SHOW_OUT_OF_STOCK_PRODUCTS   = 'superbrecommend/panels/show_out_of_stock_products';
 
     protected $_tokenData = [];
+
+    /**
+     * @var \Superb\Recommend\Helper\Data
+     */
+    protected $_helper;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -61,6 +63,8 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     protected $productMetadata;
 
     public function __construct(
+        \Magento\Framework\App\Helper\Context $context,
+        \Superb\Recommend\Helper\Data $helper,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Psr\Log\LoggerInterface $logger,
@@ -74,6 +78,8 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         $this->backendSession = $backendSession;
         $this->_encryptor = $encryptor;
         $this->productMetadata = $productMetadata;
+        $this->_helper = $helper;
+        parent::__construct($context);
     }
 
     protected function _getApiUrl($storeId = null)
@@ -85,18 +91,9 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
-    protected function _getAccountId($storeId = null)
-    {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_TRACKING_ACCOUNT_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
-
     protected function _getAccountApiUrl($storeId = null)
     {
-        return $this->_getApiUrl($storeId).'v1/'.urlencode($this->_getAccountId($storeId));
+        return $this->_getApiUrl($storeId).'v1/'.urlencode($this->_helper->getAccountId($storeId));
     }
 
     protected function _getGetTokenUrl($storeId = null)

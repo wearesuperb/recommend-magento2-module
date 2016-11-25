@@ -41,6 +41,11 @@ class Block extends \Magento\Framework\View\Element\Template
     protected $_helper;
 
     /**
+     * @var \Superb\Recommend\Helper\Tracker
+     */
+    protected $_trackerHelper;
+
+    /**
      * @var \Superb\Recommend\Helper\Cache
      */
     protected $_cacheHelper;
@@ -68,6 +73,7 @@ class Block extends \Magento\Framework\View\Element\Template
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Superb\Recommend\Helper\Data $helper,
+        \Superb\Recommend\Helper\Tracker $trackerHelper,
         \Superb\Recommend\Helper\Cache $cacheHelper,
         ModuleManager $moduleManager,
         array $data = []
@@ -77,6 +83,7 @@ class Block extends \Magento\Framework\View\Element\Template
         $this->_catalogLayer = $layerResolver->get();
         $this->_layout = $context->getLayout();
         $this->_helper = $helper;
+        $this->_trackerHelper = $trackerHelper;
         $this->_cacheHelper = $cacheHelper;
         $this->_request = $context->getRequest();
         $this->_moduleManager = $moduleManager;
@@ -99,7 +106,7 @@ class Block extends \Magento\Framework\View\Element\Template
 
     public function getTrackingData()
     {
-        $data = $this->_helper->getTrackingData();
+        $data = $this->_trackerHelper->getTrackingData();
         if ($this->_customerSession->isLoggedIn()) {
             $data = is_array($data)?$data:[];
             array_unshift($data, ["setCustomerId",$this->_customerSession->getCustomerId()]);
@@ -110,7 +117,7 @@ class Block extends \Magento\Framework\View\Element\Template
     public function checkLayerPage()
     {
         if ($this->_catalogLayer!==false && count($this->_catalogLayer->getState()->getFilters())) {
-            $this->_helper->setTrackingData(['disableRecommendationPanels'], true);
+            $this->_trackerHelper->setTrackingData(['disableRecommendationPanels'], true);
         }
     }
 

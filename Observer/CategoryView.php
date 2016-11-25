@@ -27,13 +27,13 @@ class CategoryView implements ObserverInterface
     protected $_logger;
 
     /**
-     * @var \Superb\Recommend\Helper\Data
+     * @var \Superb\Recommend\Helper\Tracker
      */
     protected $_helper;
 
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Superb\Recommend\Helper\Data $helper
+        \Superb\Recommend\Helper\Tracker $helper
     ) {
         $this->_logger = $logger;
         $this->_helper = $helper;

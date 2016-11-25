@@ -54,6 +54,7 @@ class UpdateProductsData extends CronAbstract
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogInventory\Helper\Stock $catalogInventoryStockHelper,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper,
+        \Superb\Recommend\Helper\Data $helper,
         \Superb\Recommend\Helper\Api $apiHelper,
         \Magento\Eav\Model\Config $eavConfig
     ) {
@@ -66,6 +67,7 @@ class UpdateProductsData extends CronAbstract
         $this->catalogProductVisibility = $catalogProductVisibility;
         $this->_catalogInventoryStockHelper = $catalogInventoryStockHelper;
         $this->_logger = $logger;
+        $this->_helper = $helper;
         $this->_apiHelper = $apiHelper;
         $this->_productFlatIndexerHelper = $productFlatIndexerHelper;
         $this->_isCronTypeEnabledXmlPath = \Superb\Recommend\Helper\Data::XML_PATH_DATA_CRON_ENABLED;

@@ -28,12 +28,19 @@ class Block extends Template
      */
     protected $_helper;
 
+    /**
+     * @var \Superb\Recommend\Helper\Tracker
+     */
+    protected $_trackerHelper;
+
     public function __construct(
         Template\Context $context,
         \Superb\Recommend\Helper\Data $helper,
+        \Superb\Recommend\Helper\Tracker $trackerHelper,
         array $data = []
     ) {
         $this->_helper = $helper;
+        $this->_trackerHelper = $trackerHelper;
         parent::__construct(
             $context,
             $data
@@ -53,7 +60,7 @@ class Block extends Template
 
     public function getTrackingData()
     {
-        $data = $this->_helper->getTrackingData(true, true);
+        $data = $this->_trackerHelper->getTrackingData(true, true);
         return $data;
     }
 

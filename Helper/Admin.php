@@ -40,14 +40,21 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_apiHelper;
 
+    /**
+     * @var \Superb\Recommend\Helper\Data
+     */
+    protected $_helper;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\WebsiteFactory $storeWebsiteFactory,
-        \Superb\Recommend\Helper\Api $apiHelper
+        \Superb\Recommend\Helper\Api $apiHelper,
+        \Superb\Recommend\Helper\Data $helper
     ) {
         $this->storeWebsiteFactory = $storeWebsiteFactory;
         $this->scopeConfig = $context->getScopeConfig();
         $this->_apiHelper = $apiHelper;
+        $this->_helper = $helper;
         parent::__construct($context);
     }
 
@@ -112,14 +119,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function isSingleMode()
     {
-        return $this->scopeConfig->getValue(
-            Superb_Recommend_Helper_Api::XML_PATH_TRACKING_ACCOUNT_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->getSystemConfigStoreId()
-        )==$this->scopeConfig->getValue(
-            Superb_Recommend_Helper_Api::XML_PATH_TRACKING_ACCOUNT_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return $this->_helper->getAccountId($this->getSystemConfigStoreId())==$this->_helper->getAccountId();
     }
 
     public function isStoreMode()

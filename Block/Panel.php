@@ -21,8 +21,21 @@ class Panel extends \Magento\Framework\View\Element\Template
 {
     protected $_panelId = null;
 
-    protected function _construct()
-    {
+    /**
+     * @var \Superb\Recommend\Helper\Data
+     */
+    protected $_helper;
+
+    public function __construct(
+        Template\Context $context,
+        \Superb\Recommend\Helper\Data $helper,
+        array $data = []
+    ) {
+        $this->_helper = $helper;
+        parent::__construct(
+            $context,
+            $data
+        );
         $this->setTemplate('recommend_tracker/panel.phtml');
     }
 
@@ -35,5 +48,28 @@ class Panel extends \Magento\Framework\View\Element\Template
     public function getRecommendPanelId()
     {
         return $this->_panelId;
+    }
+
+    /**
+     * Check whether the block can be displayed
+     *
+     * @return bool
+     */
+    public function canDisplay()
+    {
+        return $this->_helper->isEnabled();
+    }
+
+    /**
+     * Output content, if allowed
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if (!$this->canDisplay()) {
+            return '';
+        }
+        return parent::_toHtml();
     }
 }
