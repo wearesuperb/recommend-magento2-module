@@ -28,7 +28,7 @@ class UpdateProductsStatus extends CronAbstract
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogInventory\Helper\Stock $catalogInventoryStockHelper,
         \Superb\Recommend\Helper\Data $helper,
-        \Superb\Recommend\Helper\Api $apiHelper,
+        \Superb\Recommend\Helper\Api $apiHelper
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
