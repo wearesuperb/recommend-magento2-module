@@ -66,14 +66,12 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Helper\Context $context,
         \Superb\Recommend\Helper\Data $helper,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface $logger,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\App\ProductMetadata $productMetadata
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->logger = $logger;
+        $this->scopeConfig = $context->getScopeConfig();
+        $this->logger = $context->getLogger();
         $this->storeManager = $storeManager;
         $this->backendSession = $backendSession;
         $this->_encryptor = $encryptor;
