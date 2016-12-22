@@ -65,8 +65,6 @@ class Block extends \Magento\Framework\View\Element\Template
      */
     protected $_layout;
 
-    protected $_isScopePrivate = true;
-
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
@@ -87,7 +85,6 @@ class Block extends \Magento\Framework\View\Element\Template
         $this->_cacheHelper = $cacheHelper;
         $this->_request = $context->getRequest();
         $this->_moduleManager = $moduleManager;
-        $this->_isScopePrivate = $this->_cacheHelper->isFullPageCacheEnabled() && !$this->_cacheHelper->isVarnishEnabled();
         parent::__construct(
             $context,
             $data
@@ -119,6 +116,16 @@ class Block extends \Magento\Framework\View\Element\Template
         if ($this->_catalogLayer!==false && count($this->_catalogLayer->getState()->getFilters())) {
             $this->_trackerHelper->setTrackingData(['disableRecommendationPanels'], true);
         }
+    }
+
+    public function getTrackLoadUrl()
+    {
+        return $this->getUrl('superbrecommend/track/load');
+    }
+
+    public function getTrackCookieName()
+    {
+        return \Superb\Recommend\Helper\Tracker::COOKIE_RECOMMENDTRACKER;
     }
 
     /**

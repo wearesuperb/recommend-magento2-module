@@ -15,11 +15,36 @@
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 ?>
-<?php // <!-- {dynamic tags --> ?>
 <script>
-<?php $data = $this->getTrackingData();?>
-<?php if (is_array($data)):?><?php foreach ($data as $record): if (is_array($record) && count($record)):?>
-_taq.push(<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($record);?>);
-<?php endif; endforeach; endif; ?>
+require.config({
+    deps: [
+        'jquery',
+        'jquery/jquery-storageapi',
+        'mage/cookies'
+    ],
+    callback: function($){
+        var loadUrl = <?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($this->getTrackLoadUrl()); ?>;
+        var trackCookieName = <?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($this->getTrackCookieName()); ?>;
+        var trackerFlag = $.mage.cookies.get(trackCookieName);
+        if (typeof trackerFlag == 'string' && trackerFlag == 'data-empty') {
+            _taq.push(["trackPageview"]);
+        } else {
+            return $.getJSON(loadUrl, function (_taqRecords) {
+                try {
+                    var stateKey = 'superb_recommend_taq_key', storage = $.localStorage, flag = 't0';
+                    if (typeof storage.get(stateKey) == 'string') {
+                        flag = storage.get(stateKey);
+                    }
+                    for(var index in _taqRecords) {
+                        if (index > flag) {
+                            _taq.push(_taqRecords[index]);
+                            storage.set(stateKey,index);
+                        }
+                    }
+                } catch(e) {};
+                _taq.push(["trackPageview"]);
+            });
+        }
+    }
+});
 </script>
-<?php // <!-- dynamic tags} --> ?>

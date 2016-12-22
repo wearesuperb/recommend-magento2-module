@@ -31,10 +31,3 @@
     <?php endif; endforeach; endif; ?>
 </script>
 <?php echo $this->getChildHtml('recommend_tracker');?>
-<?php
-$_cacheHelper = $this->helper('Superb\Recommend\Helper\Cache');
-if (!$_cacheHelper->isFullPageCacheEnabled() || $_cacheHelper->isVarnishEnabled()):?>
-<script>
-_taq.push(["trackPageview"]);
-</script>
-<?php endif;?>

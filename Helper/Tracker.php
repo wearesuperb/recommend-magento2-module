@@ -623,16 +623,18 @@ class Tracker extends Tracker\Data
         } else {
             $data = $this->_session->getTrackingData();
         }
-        if (is_array($record)) {
-            $data[] = $record;
-        } else {
-            $data = [$record];
+        if (!is_array($data)) {
+            $data = [];
         }
+        $size = strlen((string)PHP_INT_MAX);
+        list($usec, $sec) = explode(" ", microtime());
+        $index = sprintf('t%0'.$size.'s%0'.($size+1).'s%05s',$sec,$usec,(count($data)+1));
+        $data[$index] = $record;
         if ($static) {
             $this->setStaticTrackingData($data);
         } else {
             $this->_session->setTrackingData($data);
-            $this->setDataExistsCookie('1');
+            $this->setDataCookieFlag('read-data');
         }
     }
 
@@ -648,6 +650,7 @@ class Tracker extends Tracker\Data
                 $this->setStaticTrackingData([]);
             } else {
                 $this->_session->setTrackingData([]);
+                $this->setDataCookieFlag('data-empty');
             }
         }
         return $data;
@@ -672,7 +675,7 @@ class Tracker extends Tracker\Data
      * @param string $cookieValue
      * @return void
      */
-    private function setDataExistsCookie($cookieValue)
+    private function setDataCookieFlag($cookieValue)
     {
         $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
             ->setPath(self::COOKIE_PATH);
