@@ -27,7 +27,6 @@
                     <argument name="template" xsi:type="string">Superb_Recommend::recommend_tracker/force.phtml</argument>
                 </action>
             </block>
-            <block class="Magento\Framework\View\Element\Template" template="Superb_Recommend::javascript.phtml" name="recommend_tracker_page_cache" />
         </referenceContainer>
     </body>
 </page>
