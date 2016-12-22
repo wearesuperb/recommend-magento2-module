@@ -628,7 +628,7 @@ class Tracker extends Tracker\Data
         }
         $size = strlen((string)PHP_INT_MAX);
         list($usec, $sec) = explode(" ", microtime());
-        $index = sprintf('t%0'.$size.'s%0'.($size+1).'s%05s',$sec,$usec,(count($data)+1));
+        $index = sprintf('t%0'.$size.'s%0'.($size+1).'s%05s', $sec, $usec, (count($data)+1));
         $data[$index] = $record;
         if ($static) {
             $this->setStaticTrackingData($data);
