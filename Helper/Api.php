@@ -144,6 +144,11 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_getAccountApiUrl($storeId).'/slots';
     }
 
+    protected function _getCartRebuildDataUrl($messageId, $storeId = null)
+    {
+        return $this->_getAccountApiUrl($storeId).'/emails/'.urlencode($messageId);
+    }
+
     protected function _getAccessToken($storeId = null)
     {
         if (!isset($this->_tokenData[$storeId]) ||
@@ -289,6 +294,20 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
             ) {
                 $panelsData = $response['results'];
                 return $panelsData;
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+        }
+    }
+
+    public function getCartRebuildData($messageId, $storeId = null)
+    {
+        try {
+            $response = $this->_callApi($this->_getCartRebuildDataUrl($messageId, $storeId), $storeId);
+            if (isset($response['success']) && $response['success']==true &&
+                isset($response['cart_rebuild_data']) && is_string($response['cart_rebuild_data'])
+            ) {
+                return $response['cart_rebuild_data'];
             }
         } catch (\Exception $e) {
             $this->logger->critical($e);

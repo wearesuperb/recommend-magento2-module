@@ -154,6 +154,11 @@ class Tracker extends Tracker\Data
      */
     protected $_customerMetadataService;
 
+    /**
+     * @var \Superb\Recommend\Helper\Rebuild
+     */
+    protected $rebuildHelper;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -170,6 +175,7 @@ class Tracker extends Tracker\Data
         \Magento\Sales\Model\OrderFactory $salesOrderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Superb\Recommend\Model\Session $session,
+        \Superb\Recommend\Helper\Rebuild $rebuildHelper,
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository,
         \Magento\Checkout\CustomerData\ItemPoolInterface $itemPool,
@@ -206,6 +212,7 @@ class Tracker extends Tracker\Data
         $this->_customerRepository = $customerRepository;
         $this->_customerAccountManagement = $customerAccountManagement;
         $this->_customerMetadataService = $customerMetadataService;
+        $this->rebuildHelper = $rebuildHelper;
         parent::__construct(
             $context,
             $this->storeManager
@@ -484,7 +491,8 @@ class Tracker extends Tracker\Data
             'type'          => 'cart-update',
             'grand-total'   => sprintf('%01.2f', $_cart->getQuote()->getGrandTotal()),
             'total-qty'     => (int)$_cart->getSummaryQty(),
-            'products'      => []
+            'products'      => [],
+            'rebuild'       => array('url'=>$this->storeManager->getStore()->getUrl('superbrecommend/cart/rebuild'),'data'=>array())
         ];
         foreach ($_items as $_item) {
             $allData = $this->itemPool->getItemData($_item);
@@ -497,7 +505,9 @@ class Tracker extends Tracker\Data
             $itemData['product-price']  = sprintf('%01.2f', $this->checkoutHelper->getPriceInclTax($_item));
             $itemData['product-total-val']  = sprintf('%01.2f', $this->checkoutHelper->getSubtotalInclTax($_item));
             $data['products'][] = $itemData;
+            $data['rebuild']['data'][] = $_item->getBuyRequest();
         }
+        $data['rebuild']['data'] = $this->rebuildHelper->base64UrlEncode(serialize($data['rebuild']['data']));
         $data = [
             'setEcommerceData',
             $data
