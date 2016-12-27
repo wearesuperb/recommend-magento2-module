@@ -12,6 +12,7 @@
         "magento/module-catalog": "100.1.*",
         "magento/module-customer": "100.1.*",
         "magento/module-checkout": "100.1.*",
+        "magento/module-wishlist": "100.1.*",
         "magento/framework": "100.1.*"
     },
     "autoload": {
