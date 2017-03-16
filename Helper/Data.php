@@ -86,7 +86,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->scopeConfig->getValue(
             self::XML_PATH_ACCOUNT_ID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId = null
+            $storeId
         );
     }
 }
