@@ -18,11 +18,11 @@
     <group id="superbrecommend">
         <job name="superbrecommend_update_products_data" instance="Superb\Recommend\Cron\UpdateProductsData" method="execute">
             <schedule>1 5 * * *</schedule>
-            <config_path>crontab/default/jobs/superbrecommend_update_products_data/schedule/cron_expr</config_path>
+            <config_path>crontab/superbrecommend/jobs/superbrecommend_update_products_data/schedule/cron_expr</config_path>
         </job>
         <job name="superbrecommend_update_products_status" instance="Superb\Recommend\Cron\UpdateProductsStatus" method="execute">
             <schedule>*/5 * * * *</schedule>
-            <config_path>crontab/default/jobs/superbrecommend_update_products_status/schedule/cron_expr</config_path>
+            <config_path>crontab/superbrecommend/jobs/superbrecommend_update_products_status/schedule/cron_expr</config_path>
         </job>
     </group>
 </config>

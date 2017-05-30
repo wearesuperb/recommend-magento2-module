@@ -20,8 +20,8 @@ namespace Superb\Recommend\Model\System\Config\Backend;
 class Cron extends \Magento\Framework\App\Config\Value
 {
     protected $_pathToPath = [
-        'superbrecommend/status_cron/frequency' =>'crontab/default/jobs/superbrecommend_update_products_status/schedule/cron_expr',
-        'superbrecommend/data_cron/frequency' => 'crontab/default/jobs/superbrecommend_update_products_data/schedule/cron_expr'
+        'superbrecommend/status_cron/frequency' =>'crontab/superbrecommend/jobs/superbrecommend_update_products_status/schedule/cron_expr',
+        'superbrecommend/data_cron/frequency' => 'crontab/superbrecommend/jobs/superbrecommend_update_products_data/schedule/cron_expr'
     ];
 
     protected $_cronExprToFrequncy = [
