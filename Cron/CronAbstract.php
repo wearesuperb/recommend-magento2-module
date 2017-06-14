@@ -122,6 +122,7 @@ abstract class CronAbstract
 
                 $collection->setVisibility($this->catalogProductVisibility->getVisibleInSiteIds());
                 if (!$this->_apiHelper->getShowOutOfStockProduct($store->getStoreId())) {
+                    $collection->setFlag('require_stock_items', true);
                     $this->_catalogInventoryStockHelper->addIsInStockFilterToCollection($collection);
                 }
 
