@@ -47,7 +47,7 @@ class UpdateProductsData extends CronAbstract
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\MutableScopeConfigInterface $scopeConfig,
         \Magento\Directory\Model\CurrencyFactory $directoryCurrencyFactory,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,

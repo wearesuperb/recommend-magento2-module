@@ -40,7 +40,7 @@ abstract class CronAbstract
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\MutableScopeConfigInterface
      */
     protected $scopeConfig;
 
@@ -100,6 +100,17 @@ abstract class CronAbstract
         }
         $products = [];
         try {
+            $showOutOfStock = $this->scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            if ($showOutOfStock == "1") {
+                $this->scopeConfig->setValue(
+                    \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                    "0",
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                );
+            }
             $this->storeManager->setCurrentStore('admin');
             $storesByAccounts = $this->getStoresByAccounts();
             foreach ($this->storeManager->getStores() as $store) {
@@ -124,6 +135,13 @@ abstract class CronAbstract
                 if (!$this->_apiHelper->getShowOutOfStockProduct($store->getStoreId())) {
                     $collection->setFlag('require_stock_items', true);
                     $this->_catalogInventoryStockHelper->addIsInStockFilterToCollection($collection);
+                }
+                if ($showOutOfStock == "1") {
+                    $this->scopeConfig->setValue(
+                        \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                        "1",
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    );
                 }
 
                 $isEmpty = false;
