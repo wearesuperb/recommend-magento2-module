@@ -525,7 +525,6 @@ class Tracker extends Tracker\Data
         ];
         foreach ($_items as $_item) {
             $itemData = [];
-            $itemData['product-name']  = $this->normalizeName($_item->getProduct()->getName());
             $itemData['product-sku']  = $_item->getProduct()->getData('sku');
             $data['products'][] = $itemData;
         }
