@@ -662,6 +662,11 @@ class Tracker extends Tracker\Data
                 $this->setDataCookieFlag('data-empty');
             }
         }
+        if ($this->_customerSession->isLoggedIn()) {
+            $data = is_array($data)?$data:[];
+            array_unshift($data, ["setCustomerId",$this->_customerSession->getCustomerId()]);
+            $this->setDataCookieFlag('read-data');
+        }
         return $data;
     }
 
