@@ -482,30 +482,32 @@ class Tracker extends Tracker\Data
         if ($_cart === null) {
             $_cart = $this->checkoutCart;
         }
-        if (!(int)$_cart->getQuote()->getId()) {
-            return [];
-        }
 
-        $_items = $this->itemRepository->getList($_cart->getQuote()->getId());
         $data = [
             'type'          => 'cart-update',
-            'grand-total'   => sprintf('%01.2f', $_cart->getQuote()->getGrandTotal()),
-            'total-qty'     => (int)$_cart->getSummaryQty(),
+            'grand-total'   => sprintf('%01.2f', 0),
+            'total-qty'     => 0,
             'products'      => [],
             'rebuild'       => array('url'=>$this->storeManager->getStore()->getUrl('superbrecommend/cart/rebuild'),'data'=>array())
         ];
-        foreach ($_items as $_item) {
-            $allData = $this->itemPool->getItemData($_item);
-            $itemData = [];
-            $itemData['product-name']  = $this->normalizeName($allData['product_name']);
-            $itemData['product-sku']  = $_item->getProduct()->getData('sku');
-            $itemData['product-image'] = $allData['product_image']['src'];
-            $itemData['product-url']  = $allData['product_url'];
-            $itemData['product-qty']  = $allData['qty'];
-            $itemData['product-price']  = sprintf('%01.2f', $this->checkoutHelper->getPriceInclTax($_item));
-            $itemData['product-total-val']  = sprintf('%01.2f', $this->checkoutHelper->getSubtotalInclTax($_item));
-            $data['products'][] = $itemData;
-            $data['rebuild']['data'][] = $_item->getBuyRequest();
+
+        if ((int)$_cart->getQuote()->getId()) {
+            $data['grand-total'] = sprintf('%01.2f', $_cart->getQuote()->getGrandTotal());
+            $data['total-qty'] = (int)$_cart->getSummaryQty();
+            $_items = $this->itemRepository->getList($_cart->getQuote()->getId());
+            foreach ($_items as $_item) {
+                $allData = $this->itemPool->getItemData($_item);
+                $itemData = [];
+                $itemData['product-name']  = $this->normalizeName($allData['product_name']);
+                $itemData['product-sku']  = $_item->getProduct()->getData('sku');
+                $itemData['product-image'] = $allData['product_image']['src'];
+                $itemData['product-url']  = $allData['product_url'];
+                $itemData['product-qty']  = $allData['qty'];
+                $itemData['product-price']  = sprintf('%01.2f', $this->checkoutHelper->getPriceInclTax($_item));
+                $itemData['product-total-val']  = sprintf('%01.2f', $this->checkoutHelper->getSubtotalInclTax($_item));
+                $data['products'][] = $itemData;
+                $data['rebuild']['data'][] = $_item->getBuyRequest();
+            }
         }
         $data['rebuild']['data'] = $this->rebuildHelper->base64UrlEncode(serialize($data['rebuild']['data']));
         $data = [

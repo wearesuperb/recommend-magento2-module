@@ -49,11 +49,9 @@
         <observer name="superbrecommend" instance="Superb\Recommend\Observer\CheckoutPage"/>
     </event>
     <event name="checkout_onepage_controller_success_action">
-        <observer name="superbrecommend_order" instance="Superb\Recommend\Observer\SetOnOrderSuccessPageViewObserver" />
-        <observer name="superbrecommend_cart_save" instance="Superb\Recommend\Observer\CartSave"/>
+        <observer name="superbrecommend" instance="Superb\Recommend\Observer\SetOnOrderSuccessPageViewObserver" />
     </event>
     <event name="multishipping_checkout_controller_success_action">
-        <observer name="superbrecommend_order" instance="Superb\Recommend\Observer\SetOnOrderSuccessPageViewObserver" />
-        <observer name="superbrecommend_cart_save" instance="Superb\Recommend\Observer\CartSave"/>
+        <observer name="superbrecommend" instance="Superb\Recommend\Observer\SetOnOrderSuccessPageViewObserver" />
     </event>
 </config>
