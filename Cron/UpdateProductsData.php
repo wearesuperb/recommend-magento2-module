@@ -123,6 +123,7 @@ class UpdateProductsData extends CronAbstract
             $_attributes[] = $row['magento_attribute'];
         }
         $productFlatAttributeCodes = $this->_productFlatIndexerHelper->getAttributeCodes();
+        $store = $this->storeManager->getStore();
         foreach ($_attributes as $_attributeCode) {
             $attribute = $this->eavConfig->getAttribute('catalog_product', $_attributeCode);
             if (in_array($_attributeCode, $productFlatAttributeCodes)) {
