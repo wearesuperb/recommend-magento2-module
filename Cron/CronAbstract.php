@@ -151,14 +151,16 @@ abstract class CronAbstract
                     $productCol->getSelect()->limit(\Superb\Recommend\Helper\Data::LIMIT_STEP, $offset);
 
                     $isEmpty = true;
-                    foreach ($productCol as $product) {
-                        $isEmpty = false;
-                        $offset++;
-                        if (!isset($products[$accountId])) {
-                            $products[$accountId] = [];
-                        }
+                    if ($productCol->count()) {
+                        foreach ($productCol as $product) {
+                            $isEmpty = false;
+                            $offset++;
+                            if (!isset($products[$accountId])) {
+                                $products[$accountId] = [];
+                            }
 
-                        $products[$accountId][$product->getSku()] = $this->_getProductData($products, $accountId, $product);
+                            $products[$accountId][$product->getSku()] = $this->_getProductData($products, $accountId, $product);
+                        }
                     }
                 }
             }

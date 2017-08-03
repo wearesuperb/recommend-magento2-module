@@ -449,8 +449,8 @@ class Tracker extends Tracker\Data
                 'secure_image'          => $secureImageUrl,
                 'url'                   => $_product->getUrlModel()->getUrl($_product, ['_ignore_category'=>true]),
                 'categories'            => $categories,
-                'price'                 => $this->_pricingHelper->currency($_finalPrice, false, false),
-                'original_price'        => $this->_pricingHelper->currency($_price, false, false),
+                'price'                 => $_finalPrice,
+                'original_price'        => $_price,
                 'additional_attributes' => $additionalAttributes
             ]
         ];

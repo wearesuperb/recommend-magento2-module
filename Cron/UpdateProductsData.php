@@ -81,7 +81,7 @@ class UpdateProductsData extends CronAbstract
 
     protected function _getCurrentStoreCurrencies()
     {
-        if ($this->_currentStoreCurrencies!==null) {
+        if ($this->_currentStoreCurrencies === null) {
             $currencies = [];
             $codes = $this->storeManager->getStore()->getAvailableCurrencyCodes(true);
             if (is_array($codes)) {
@@ -105,7 +105,7 @@ class UpdateProductsData extends CronAbstract
 
     protected function _getCurrentStoreAttributes()
     {
-        if ($this->_currentStoreAttributes!==null) {
+        if ($this->_currentStoreAttributes !== null) {
             $attributes = @unserialize((string)$this->scopeConfig->getValue(
                 \Superb\Recommend\Helper\Data::XML_PATH_TRACKING_PRODUCT_ATTRIBUTES,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -117,7 +117,7 @@ class UpdateProductsData extends CronAbstract
     
     protected function _addAttributesToCollection($collection)
     {
-        $attributes = $this->_getCurrentStoreAttributes();
+        $attributes = $this->_getCurrentStoreAttributes() ?: [];
         $_attributes = [];
         foreach ($attributes as $row) {
             $_attributes[] = $row['magento_attribute'];
@@ -151,6 +151,7 @@ class UpdateProductsData extends CronAbstract
             $price = [];
         }
         $currencies = $this->_getCurrentStoreCurrencies();
+        $store = $this->storeManager->getStore();
         foreach ($currencies as $code => $currency) {
             if (!isset($price[$code])) {
                 $price[$code] = $store->getBaseCurrency()->convert(
@@ -168,7 +169,7 @@ class UpdateProductsData extends CronAbstract
 
         $additionalAttributes = [];
         $eavConfig = $this->eavConfig;
-        $attributes = $this->_getCurrentStoreAttributes();
+        $attributes = $this->_getCurrentStoreAttributes() ?: [];
         foreach ($attributes as $row) {
             $attribute = $eavConfig->getAttribute('catalog_product', $row['magento_attribute']);
             if ($attribute && $attribute->getId()) {
