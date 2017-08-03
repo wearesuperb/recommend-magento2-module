@@ -105,7 +105,7 @@ class UpdateProductsData extends CronAbstract
 
     protected function _getCurrentStoreAttributes()
     {
-        if ($this->_currentStoreAttributes !== null) {
+        if ($this->_currentStoreAttributes === null) {
             $attributes = @unserialize((string)$this->scopeConfig->getValue(
                 \Superb\Recommend\Helper\Data::XML_PATH_TRACKING_PRODUCT_ATTRIBUTES,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -117,7 +117,7 @@ class UpdateProductsData extends CronAbstract
     
     protected function _addAttributesToCollection($collection)
     {
-        $attributes = $this->_getCurrentStoreAttributes() ?: [];
+        $attributes = $this->_getCurrentStoreAttributes();
         $_attributes = [];
         foreach ($attributes as $row) {
             $_attributes[] = $row['magento_attribute'];
