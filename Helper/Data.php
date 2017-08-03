@@ -26,6 +26,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_STATUS_CRON_ENABLED          = 'superbrecommend/status_cron/enabled';
     const LIMIT_STEP                            = 1000;
 
+    const XML_PATH_TRACKING_PRODUCT_ATTRIBUTES  = 'superbrecommend/general_settings/product_attributes';
+
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
