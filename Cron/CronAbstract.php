@@ -20,7 +20,7 @@ namespace Superb\Recommend\Cron;
 abstract class CronAbstract
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var \Superb\Recommend\Logger\Logger
      */
     protected $_logger;
 
@@ -86,7 +86,7 @@ abstract class CronAbstract
         }
         return $storesByAccounts;
     }
-    
+
     public function execute(\Magento\Cron\Model\Schedule $schedule)
     {
         if (!$this->_helper->isEnabled()) {

@@ -22,7 +22,7 @@ use Magento\Framework\Event\ObserverInterface;
 class DeleteSubscription implements ObserverInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var \Superb\Recommend\Logger\Logger
      */
     protected $_logger;
 
@@ -32,7 +32,7 @@ class DeleteSubscription implements ObserverInterface
     protected $_helper;
 
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
+        \Superb\Recommend\Logger\Logger $logger,
         \Superb\Recommend\Helper\Tracker $helper
     ) {
         $this->_logger = $logger;

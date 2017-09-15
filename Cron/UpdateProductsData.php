@@ -45,7 +45,7 @@ class UpdateProductsData extends CronAbstract
     protected $_currentStoreAttributes = null;
 
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
+        \Superb\Recommend\Logger\Logger $logger,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\MutableScopeConfigInterface $scopeConfig,
         \Magento\Directory\Model\CurrencyFactory $directoryCurrencyFactory,
@@ -114,7 +114,7 @@ class UpdateProductsData extends CronAbstract
         }
         return $this->_currentStoreAttributes;
     }
-    
+
     protected function _addAttributesToCollection($collection)
     {
         $attributes = $this->_getCurrentStoreAttributes();

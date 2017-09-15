@@ -23,7 +23,7 @@ use Magento\Framework\Event\ObserverInterface;
 class SetOnOrderSuccessPageViewObserver implements ObserverInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var \Superb\Recommend\Logger\Logger
      */
     protected $_logger;
 
@@ -33,7 +33,7 @@ class SetOnOrderSuccessPageViewObserver implements ObserverInterface
     protected $_helper;
 
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
+        \Superb\Recommend\Logger\Logger $logger,
         \Superb\Recommend\Helper\Tracker $helper
     ) {
         $this->_logger = $logger;

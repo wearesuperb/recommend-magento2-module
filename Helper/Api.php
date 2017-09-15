@@ -38,7 +38,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
     protected $scopeConfig;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var \Superb\Recommend\Logger\Logger
      */
     protected $logger;
 
@@ -68,10 +68,11 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Session $backendSession,
-        \Magento\Framework\App\ProductMetadata $productMetadata
+        \Magento\Framework\App\ProductMetadata $productMetadata,
+        \Superb\Recommend\Logger\Logger $logger
     ) {
         $this->scopeConfig = $context->getScopeConfig();
-        $this->logger = $context->getLogger();
+        $this->_logger = $logger;
         $this->storeManager = $storeManager;
         $this->backendSession = $backendSession;
         $this->_encryptor = $encryptor;
@@ -178,7 +179,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                     $this->_tokenData[$storeId] = $tokenData['token'];
                 }
             } catch (\Exception $e) {
-                $this->logger->critical($e);
+                $this->_logger->critical($e);
             }
         }
         if (isset($this->_tokenData[$storeId]) &&
@@ -194,7 +195,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         try {
             $response = $this->_callApi($this->_getUploadProductsDataUrl($storeId), $storeId, ['products'=>$products]);
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 
@@ -209,7 +210,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                 return $productsData;
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 
@@ -224,7 +225,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                 return $slotsPageTypesData;
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 
@@ -239,7 +240,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                 return $slotsData;
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 
@@ -251,7 +252,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                 return true;
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 
@@ -266,7 +267,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                 return $panelsData;
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 
@@ -281,7 +282,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                 return $panelsData;
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 
@@ -296,7 +297,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                 return $panelsData;
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 
@@ -310,7 +311,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                 return $response['cart_rebuild_data'];
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 
@@ -343,7 +344,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                 return false;
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->_logger->critical($e);
         }
     }
 

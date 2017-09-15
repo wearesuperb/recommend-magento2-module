@@ -20,7 +20,7 @@ namespace Superb\Recommend\Cron;
 class UpdateProductsStatus extends CronAbstract
 {
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
+        \Superb\Recommend\Logger\Logger $logger,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\MutableScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Config $catalogConfig,
