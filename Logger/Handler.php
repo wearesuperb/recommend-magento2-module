@@ -1,8 +1,6 @@
 <?php
 namespace Superb\Recommend\Logger;
 
-use Monolog\Logger;
-
 class Handler extends \Magento\Framework\Logger\Handler\Base
 {
     /**
