@@ -65,12 +65,12 @@ class Data extends \Superb\Recommend\Helper\Data
             return $this->scopeConfig->getValue(
                 self::XML_PATH_TRACKING_URL_SECURE,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ).'trackerv13.js';
+            ).'trackerv14.js';
         } else {
             return $this->scopeConfig->getValue(
                 self::XML_PATH_TRACKING_URL,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ).'trackerv13.js';
+            ).'trackerv14.js';
         }
     }
 
