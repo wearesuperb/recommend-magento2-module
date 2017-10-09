@@ -586,8 +586,6 @@ class Tracker extends Tracker\Data
                 'type'              => 'sale',
                 'sale-qty'          => '',
                 'email'             => $order->getCustomerEmail(),
-                'firstname'         => $order->getCustomerFirstname(),
-                'lastname'          => $order->getCustomerLastname(),
                 'sale-grand-total'  => $order->getBaseGrandTotal(),
                 'sale-tax'          => $order->getBaseTaxAmount(),
                 'sale-delivery'     => $order->getBaseShippingAmount(),
@@ -595,6 +593,13 @@ class Tracker extends Tracker\Data
                 'sale-currency'     => $order->getBaseCurrencyCode(),
                 'products'          => []
             ];
+            if ($order->getCustomerId() === NULL) {
+                $data['firstname']  = $order->getBillingAddress()->getFirstname();
+                $data['lastname']   = $order->getBillingAddress()->getLastname();
+            } else {
+                $data['firstname']  = $order->getCustomerFirstname();
+                $data['lastname']   = $order->getCustomerLastname();
+            }
             $_qtyOrdered = 0;
             foreach ($_items as $_item) {
                 $_qtyOrdered += $_item->getQtyOrdered();
