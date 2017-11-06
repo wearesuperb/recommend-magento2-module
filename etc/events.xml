@@ -18,4 +18,7 @@
     <event name="admin_system_config_changed_section_superbrecommend">
         <observer name="superbrecommend" instance="Superb\Recommend\Observer\SaveSystemConfig"/>
     </event>
+    <event name="sales_order_save_after">
+        <observer name="superbrecommend" instance="Superb\Recommend\Observer\OrderUpdate"/>
+    </event>
 </config>

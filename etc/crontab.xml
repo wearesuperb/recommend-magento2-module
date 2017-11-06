@@ -24,5 +24,9 @@
             <schedule>*/5 * * * *</schedule>
             <config_path>crontab/superbrecommend/jobs/superbrecommend_update_products_status/schedule/cron_expr</config_path>
         </job>
+        <job name="superbrecommend_upload_orders_status" instance="Superb\Recommend\Cron\UploadOrdersStatus" method="execute">
+            <schedule>*/1 * * * *</schedule>
+            <config_path>crontab/superbrecommend/jobs/superbrecommend_upload_orders_status/schedule/cron_expr</config_path>
+        </job>
     </group>
 </config>

@@ -150,6 +150,11 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_getAccountApiUrl($storeId).'/emails/'.urlencode($messageId);
     }
 
+    protected function _getUploadOrderDataUrl($storeId = null)
+    {
+        return $this->_getAccountApiUrl($storeId).'/orders/uploadData';
+    }
+
     protected function _getAccessToken($storeId = null)
     {
         if (!isset($this->_tokenData[$storeId]) ||
@@ -356,6 +361,23 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
+    public function uploadOrderData($data, $storeId = null)
+    {
+        try {
+            $response = $this->_callApi(
+                $this->_getUploadOrderDataUrl($storeId),
+                $storeId,
+                ['order_data'=>$data]
+            );
+            if (isset($response['success'])) {
+                return $response;
+            }
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+            return false;
+        }
+    }
+
     protected function _callApi($url, $storeId, $post = null, $isAuthTokenRequest = false, $headers = [])
     {
         $_ch = curl_init();
@@ -374,6 +396,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         curl_setopt($_ch, CURLOPT_RETURNTRANSFER, 1);
         $responseBody = curl_exec($_ch);
         curl_close($_ch);
+
         return @json_decode($responseBody, true);
     }
 }
