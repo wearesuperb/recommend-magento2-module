@@ -1,20 +1,23 @@
 <?php
+
 namespace Superb\Recommend\Setup;
 
-use Magento\Framework\Setup\InstallSchemaInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
 
-class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
+class UpgradeSchema implements  UpgradeSchemaInterface
 {
-    public function install(\Magento\Framework\Setup\SchemaSetupInterface $setup, \Magento\Framework\Setup\ModuleContextInterface $context)
-    {
+    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context) {
         $installer = $setup;
         $installer->startSetup();
-        if (!$installer->tableExists('superb_recommend_orders_queue')) {
-            $table = $installer->getConnection()->newTable(
-                $installer->getTable('superb_recommend_orders_queue')
-            )
+        if (version_compare($context->getVersion(), '0.0.11') < 0) {
+            $connection = $installer->getConnection();
+            $tableName = $connection->getTableName('superb_recommend_orders_queue');
+            if ($connection->isTableExists($tableName) == true) {
+                $connection->dropTable($tableName);
+            }
+            $table = $connection->newTable($tableName)
                 ->addColumn(
                     'id',
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -25,7 +28,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                         'primary'  => true,
                         'unsigned' => true,
                     ],
-                    'Post ID'
+                    'ID'
                 )
                 ->addColumn(
                     'email',
@@ -62,7 +65,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     ['nullable => true'],
                     'Store Id'
                 );
-            $installer->getConnection()->createTable($table);
+            $connection->createTable($table);
         }
         $installer->endSetup();
     }
