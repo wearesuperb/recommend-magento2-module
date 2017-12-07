@@ -37,11 +37,19 @@ class UploadOrdersStatus
 
             foreach ($ordersQueueCollection->getItems() as $order) {
                 $orderData = [];
-                $orderData['cid']       = $order->getData('cid');
-                $orderData['email']     = $order->getData('email');
-                $orderData['order_id']  = $order->getData('order_id');
-                $orderData['status']    = $order->getData('status');
-                $orderData['store_id']  = $order->getData('store_id');
+                $orderData['cid']           = $order->getData('cid');
+                $orderData['bid']           = $order->getData('bid');
+                $orderData['email']         = $order->getData('email');
+                $orderData['customer_name'] = $order->getData('customer_name');
+                $orderData['order_id']      = $order->getData('order_id');
+                $orderData['status']        = $order->getData('status');
+                $orderData['store_id']      = $order->getData('store_id');
+                $orderData['grand_total']   = $order->getData('grand_total');
+                $orderData['tax']           = $order->getData('tax');
+                $orderData['delivery']      = $order->getData('delivery');
+                $orderData['currency']      = $order->getData('currency');
+                $orderData['products']      = $order->getData('products');
+                $orderData['sale_qty']      = $order->getData('sale_qty');
 
                 $response = $this->_apiHelper->uploadOrderData($orderData, $orderData['store_id']);
                 if ($response['success']) {

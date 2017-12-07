@@ -25,7 +25,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                         'primary'  => true,
                         'unsigned' => true,
                     ],
-                    'Post ID'
+                    'ID'
                 )
                 ->addColumn(
                     'email',
@@ -61,6 +61,69 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     255,
                     ['nullable => true'],
                     'Store Id'
+                )
+                ->addColumn(
+                    'bid',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable => true'],
+                    'Browser Id'
+                )
+                ->addColumn(
+                    'customer_name',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable => true'],
+                    'Customer Name'
+                )
+                ->addColumn(
+                    'grand_total',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable => false'],
+                    'Grand Total'
+                )
+                ->addColumn(
+                    'tax',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable => false'],
+                    'Tax'
+                )
+                ->addColumn(
+                    'delivery',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable => false'],
+                    'Delivery'
+                )
+                ->addColumn(
+                    'sale_qty',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable => false'],
+                    'Sale Qty'
+                )
+                ->addColumn(
+                    'delivery',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable => false'],
+                    'Currency'
+                )
+                ->addColumn(
+                    'products',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable => true'],
+                    'Products'
+                )
+                ->addColumn(
+                    'segment',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable => true'],
+                    'Segment'
                 );
             $installer->getConnection()->createTable($table);
         }
