@@ -136,13 +136,6 @@ abstract class CronAbstract
                     $collection->setFlag('require_stock_items', true);
                     $this->_catalogInventoryStockHelper->addIsInStockFilterToCollection($collection);
                 }
-                if ($showOutOfStock == "1") {
-                    $this->scopeConfig->setValue(
-                        \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
-                        "1",
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    );
-                }
 
                 $isEmpty = false;
                 $offset = 0;
@@ -163,6 +156,13 @@ abstract class CronAbstract
                         }
                     }
                 }
+            }
+            if ($showOutOfStock == "1") {
+                $this->scopeConfig->setValue(
+                    \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                    "1",
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                );
             }
             $this->storeManager->setCurrentStore('admin');
             $this->_logger->info(json_encode($products));

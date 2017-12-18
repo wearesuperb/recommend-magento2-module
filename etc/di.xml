@@ -38,4 +38,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider">
+        <plugin name="Superb_Recommend_Plugin_LowestPriceOptionsProviderFix" sortOrder="10" type="Superb\Recommend\Plugin\LowestPriceOptionsProviderFix"/>
+    </type>
 </config>
