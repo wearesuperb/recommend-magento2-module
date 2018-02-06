@@ -30,8 +30,6 @@ class UploadOrdersStatus
     }
 
     public function execute(\Magento\Cron\Model\Schedule $schedule) {
-        $orderData = [];
-
         try {
             $ordersQueueCollection = $this->_ordersQueue->getCollection()->setOrder('id', 'ASC');
 
@@ -50,12 +48,17 @@ class UploadOrdersStatus
                 $orderData['currency']      = $order->getData('currency');
                 $orderData['products']      = $order->getData('products');
                 $orderData['sale_qty']      = $order->getData('sale_qty');
+                $orderData['created_at']    = $order->getData('created_at');
 
                 $response = $this->_apiHelper->uploadOrderData($orderData, $orderData['store_id']);
-                if ($response['success']) {
-                    $order->delete();
+                if (isset($response['success']) && $response['success'] == false || !isset($response['success'])) {
+                    if ($order->getData('created_at') + 604800 < time()) {
+                        $order->delete();
+                    } else {
+                        $this->_logger->warning("Unable to send order (" . $order->getData('order_id') . ") via API." . json_encode($response['error_message']));
+                    }
                 } else {
-                    $this->_logger->warning("Unable to send order (".$order->getData('order_id').") via API.".json_encode($response['error_message']));
+                    $order->delete();
                 }
             }
         } catch (\Exception $e) {
