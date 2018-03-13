@@ -9,11 +9,11 @@
     ],
     "require": {
         "php": "~5.6.0|~7.0.0",
-        "magento/module-catalog": "100> <=102",
-        "magento/module-customer": "100> <=102",
-        "magento/module-checkout": "100> <=102",
-        "magento/module-wishlist": "100> <=102",
-        "magento/framework": "100> <=102"
+        "magento/module-catalog": ">100 <103",
+        "magento/module-customer": ">100 <103",
+        "magento/module-checkout": ">100 <103",
+        "magento/module-wishlist": ">100 <103",
+        "magento/framework": ">100 <103"
     },
     "autoload": {
         "files": [
