@@ -55,7 +55,8 @@ class UploadOrdersStatus
 
                 $response = $this->_apiHelper->uploadOrderData($orderData, $orderData['store_id']);
                 if (isset($response['success']) && $response['success'] == false || !isset($response['success'])) {
-                    if (($orderData['updated_at'] ? $orderData['updated_at'] : $orderData['created_at'])  + 604800 < time()) {
+                    $fromTime = $order->getData('updated_at') ? $order->getData('updated_at') : $orderData['created_at'];
+                    if ($fromTime  + 604800 < time()) {
                         $order->delete();
                     } else {
                         $this->_logger->warning("Unable to send order (" . $order->getData('order_id') . ") via API." . json_encode($response['error_message']));
