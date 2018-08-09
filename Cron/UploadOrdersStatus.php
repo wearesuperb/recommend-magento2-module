@@ -49,10 +49,13 @@ class UploadOrdersStatus
                 $orderData['products']      = $order->getData('products');
                 $orderData['sale_qty']      = $order->getData('sale_qty');
                 $orderData['created_at']    = $order->getData('created_at');
+                if ($order->getData('updated_at')) {
+                    $orderData['updated_at']    = $order->getData('updated_at');
+                }
 
                 $response = $this->_apiHelper->uploadOrderData($orderData, $orderData['store_id']);
                 if (isset($response['success']) && $response['success'] == false || !isset($response['success'])) {
-                    if ($order->getData('created_at') + 604800 < time()) {
+                    if (($orderData['updated_at'] ? $orderData['updated_at'] : $orderData['created_at'])  + 604800 < time()) {
                         $order->delete();
                     } else {
                         $this->_logger->warning("Unable to send order (" . $order->getData('order_id') . ") via API." . json_encode($response['error_message']));

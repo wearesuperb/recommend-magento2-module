@@ -326,6 +326,22 @@ class UpgradeSchema implements  UpgradeSchemaInterface
                 );
             $connection->createTable($table);
         }
+        if (version_compare($context->getVersion(), '0.0.30') < 0) {
+            $connection = $installer->getConnection();
+            $tableName = $connection->getTableName('superb_recommend_orders_queue');
+            if ($connection->isTableExists($tableName) == true) {
+                $connection->addColumn(
+                    $installer->getTable('superb_recommend_orders_queue'),
+                    'updated_at',
+                    [
+                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        'length' => 50,
+                        'nullable' => true,
+                        'comment' => 'Created At'
+                    ]
+                );
+            }
+        }
         $installer->endSetup();
     }
 }
