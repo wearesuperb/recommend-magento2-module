@@ -337,7 +337,7 @@ class UpgradeSchema implements  UpgradeSchemaInterface
                         'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                         'length' => 50,
                         'nullable' => true,
-                        'comment' => 'Created At'
+                        'comment' => 'Updated At'
                     ]
                 );
             }
