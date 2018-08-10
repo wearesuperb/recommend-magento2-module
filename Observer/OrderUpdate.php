@@ -68,7 +68,8 @@ class OrderUpdate implements ObserverInterface
                 'tax'           => $order->getBaseTaxAmount(),
                 'delivery'      => $order->getBaseShippingAmount(),
                 'currency'      => $order->getBaseCurrencyCode(),
-                'created_at'    => time()
+                'created_at'    => (new \DateTime($order->getCreatedAt()))->getTimestamp(),
+                'updated_at'    => (new \DateTime($order->getUpdatedAt()))->getTimestamp()
             ]);
             $_qtyOrdered = 0;
             $products = [];
