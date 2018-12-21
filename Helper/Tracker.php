@@ -642,10 +642,7 @@ class Tracker extends Tracker\Data
         if (!is_array($data)) {
             $data = [];
         }
-        $size = strlen((string)PHP_INT_MAX);
-        list($usec, $sec) = explode(" ", microtime());
-        $index = sprintf('t%0'.$size.'s%0'.($size+1).'s%05s', $sec, $usec, (count($data)+1));
-        $data[$index] = $record;
+        $data[$this->getRecordIndex($data)] = $record;
         if ($static) {
             $this->setStaticTrackingData($data);
         } else {
@@ -671,7 +668,15 @@ class Tracker extends Tracker\Data
         }
         if ($this->_customerSession->isLoggedIn()) {
             $data = is_array($data)?$data:[];
-            array_unshift($data, ["setCustomerId",$this->_customerSession->getCustomerId()]);
+            $data = array_merge(
+                [
+                    $this->getRecordIndex($data) => [
+                        "setCustomerId",
+                        $this->_customerSession->getCustomerId()
+                    ]
+                ],
+                $data
+            );
             $this->setDataCookieFlag('read-data');
         }
         return $data;
@@ -701,5 +706,12 @@ class Tracker extends Tracker\Data
         $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
             ->setPath(self::COOKIE_PATH);
         $this->cookieManager->setPublicCookie(self::COOKIE_RECOMMENDTRACKER, $cookieValue, $metadata);
+    }
+
+    private function getRecordIndex($data)
+    {
+        $size = strlen((string)PHP_INT_MAX);
+        list($usec, $sec) = explode(" ", microtime());
+        return sprintf('t%0'.$size.'s%0'.($size+1).'s%05s', $sec, $usec, (count($data)+1));
     }
 }
