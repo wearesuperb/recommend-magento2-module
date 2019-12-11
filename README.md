@@ -19,7 +19,7 @@ How to install
     $ php bin/magento setup:upgrade
 ```
 
-## ✓ Install 
+## ✓ Install manually
 * Download the <a href="https://github.com/wearesuperb/recommend-magento2-module/archive/master.zip">Recommend Module</a>, unpack it and upload its contents to a new folder ```<root>/app/code/Superb/Recommend/``` of your Magento 2 installation
 * Enable Recommend Module
 ```sh
