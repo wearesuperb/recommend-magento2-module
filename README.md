@@ -6,3 +6,25 @@ Increase your revenue, drive conversions and transform your eCommerce site today
 Get Started
 -----------
 Go to [Recommend.pro](https://recommend.pro/) and [Register](https://control.recommend.pro/signup)
+
+How to install
+-----------
+## ✓ Install via composer (recommended)
+* Run the following command in Magento 2 root folder:
+
+```sh
+    $ composer require superb/module-recommend
+```
+```sh
+    $ php bin/magento setup:upgrade
+```
+
+## ✓ Install 
+* Download the <a href="https://github.com/wearesuperb/recommend-magento2-module/archive/master.zip">Recommend Module</a>, unpack it and upload its contents to a new folder ```<root>/app/code/Superb/Recommend/``` of your Magento 2 installation
+* Enable Recommend Module
+```sh
+    $ php bin/magento module:enable Superb_Recommend
+```
+```sh
+    $ php bin/magento setup:upgrade
+```
