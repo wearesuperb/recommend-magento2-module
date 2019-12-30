@@ -13,7 +13,7 @@ namespace Superb\Recommend\Block;
  * @category   Superb
  * @package    Superb_Recommend
  * @author     Superb <hello@wearesuperb.com>
- * @copyright  Copyright (c) 2015 Superb Media Limited
+ * @copyright  Copyright (c) 2019 Superb Media Limited
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 use Magento\Framework\Module\Manager as ModuleManager;
