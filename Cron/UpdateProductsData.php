@@ -17,6 +17,9 @@ namespace Superb\Recommend\Cron;
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+
 class UpdateProductsData extends CronAbstract
 {
     /**
@@ -44,6 +47,11 @@ class UpdateProductsData extends CronAbstract
      */
     protected $_currentStoreAttributes = null;
 
+    /**
+     * @var \Superb\Recommend\Helper\Tracker\Data
+     */
+    protected $trackerHelper;
+
     public function __construct(
         \Superb\Recommend\Logger\Logger $logger,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -56,7 +64,8 @@ class UpdateProductsData extends CronAbstract
         \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper,
         \Superb\Recommend\Helper\Data $helper,
         \Superb\Recommend\Helper\Api $apiHelper,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        \Superb\Recommend\Helper\Tracker\Data $trackerHelper
     ) {
         $this->eavConfig = $eavConfig;
         $this->storeManager = $storeManager;
@@ -71,6 +80,7 @@ class UpdateProductsData extends CronAbstract
         $this->_apiHelper = $apiHelper;
         $this->_productFlatIndexerHelper = $productFlatIndexerHelper;
         $this->_isCronTypeEnabledXmlPath = \Superb\Recommend\Helper\Data::XML_PATH_DATA_CRON_ENABLED;
+        $this->trackerHelper = $trackerHelper;
     }
 
     protected function _resetCurrentStoreData()
@@ -106,11 +116,7 @@ class UpdateProductsData extends CronAbstract
     protected function _getCurrentStoreAttributes()
     {
         if ($this->_currentStoreAttributes === null) {
-            $attributes = @unserialize((string)$this->scopeConfig->getValue(
-                \Superb\Recommend\Helper\Data::XML_PATH_TRACKING_PRODUCT_ATTRIBUTES,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ));
-            $this->_currentStoreAttributes = is_array($attributes)?$attributes:[];
+            $this->_currentStoreAttributes = $this->trackerHelper->getProductUpdateAttributes();
         }
         return $this->_currentStoreAttributes;
     }

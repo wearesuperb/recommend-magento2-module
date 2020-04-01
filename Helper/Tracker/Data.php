@@ -14,7 +14,12 @@
  * @copyright  Copyright (c) 2015 Superb Media Limited
  * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
+
 namespace Superb\Recommend\Helper\Tracker;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Data extends \Superb\Recommend\Helper\Data
 {
@@ -35,12 +40,18 @@ class Data extends \Superb\Recommend\Helper\Data
      */
     protected $storeManager;
 
+
+    protected $productMetadata;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
-    ) {
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        ProductMetadataInterface $productMetadata
+    )
+    {
         $this->scopeConfig = $context->getScopeConfig();
         $this->storeManager = $storeManager;
+        $this->productMetadata = $productMetadata;
         parent::__construct($context);
     }
 
@@ -112,19 +123,33 @@ class Data extends \Superb\Recommend\Helper\Data
 
     public function getProductUpdateAttributes()
     {
-        $attributes = @unserialize((string)$this->scopeConfig->getValue(
+        $value = (string)$this->scopeConfig->getValue(
             self::XML_PATH_TRACKING_PRODUCT_ATTRIBUTES,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ));
-        return is_array($attributes)?$attributes:[];
+        );
+        return $this->unserialize($value);
     }
 
     public function getCustomerUpdateAttributes()
     {
-        $attributes = @unserialize((string)$this->scopeConfig->getValue(
+        $value = (string)$this->scopeConfig->getValue(
             self::XML_PATH_TRACKING_CUSTOMER_ATTRIBUTES,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ));
-        return is_array($attributes)?$attributes:[];
+        );
+        return $this->unserialize($value);
+    }
+
+    protected function unserialize($value)
+    {
+        if (version_compare($this->productMetadata->getVersion(), '2.2.0', '>=')) {
+            try {
+                $value = ObjectManager::getInstance()->create(SerializerInterface::class)->unserialize($value);
+            } catch (\InvalidArgumentException $invalidArgumentException) {
+                $value = [];
+            }
+        } else {
+            $value = @unserialize($value);
+        }
+        return is_array($value) ? $value : [];
     }
 }
