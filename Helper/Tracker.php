@@ -16,6 +16,8 @@
  */
 namespace Superb\Recommend\Helper;
 
+use Magento\Framework\App\ProductMetadataInterface;
+
 class Tracker extends Tracker\Data
 {
     /**
@@ -185,7 +187,8 @@ class Tracker extends Tracker\Data
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Api\AccountManagementInterface $customerAccountManagement,
-        \Magento\Customer\Api\CustomerMetadataInterface $customerMetadataService
+        \Magento\Customer\Api\CustomerMetadataInterface $customerMetadataService,
+        ProductMetadataInterface $productMetadata
     ) {
         $this->_salesOrderCollection = $salesOrderCollection;
         $this->cookieManager = $cookieManager;
@@ -215,7 +218,8 @@ class Tracker extends Tracker\Data
         $this->rebuildHelper = $rebuildHelper;
         parent::__construct(
             $context,
-            $this->storeManager
+            $this->storeManager,
+            $productMetadata
         );
     }
 
