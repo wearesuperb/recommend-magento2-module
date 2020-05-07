@@ -520,7 +520,7 @@ class Tracker extends Tracker\Data
                 $data['rebuild']['data'][] = $_item->getBuyRequest();
             }
         }
-        $data['rebuild']['data'] = $this->rebuildHelper->base64UrlEncode($this->helper->serialize($data['rebuild']['data']));
+        $data['rebuild']['data'] = $this->rebuildHelper->base64UrlEncode(json_encode($data['rebuild']['data']));
         $data = [
             'setEcommerceData',
             $data

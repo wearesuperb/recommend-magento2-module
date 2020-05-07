@@ -82,10 +82,10 @@ class Rebuild extends \Magento\Framework\App\Action\Action
         $data = null;
         $messageId = $this->getRequest()->getParam($this->rebuildHelper->getTrackingMessageParamName(),false);
         if ($data = $this->getRequest()->getParam('data',false)) {
-            $data = $this->helper->unserialize($this->rebuildHelper->base64UrlDecode($data));
+            $data = json_decode($this->rebuildHelper->base64UrlDecode($data));
         } elseif (strlen($messageId)) {
             if (is_string($data = $this->apiHelper->getCartRebuildData($messageId))) {
-                $data = $this->helper->unserialize($this->rebuildHelper->base64UrlDecode($data));
+                $data = json_decode($this->rebuildHelper->base64UrlDecode($data));
             }
         }
 

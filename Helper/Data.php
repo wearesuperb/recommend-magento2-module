@@ -103,17 +103,4 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         return is_array($value) ? $value : [];
     }
-
-    public function serialize($value)
-    {
-        if (class_exists(\Magento\Framework\Serialize\SerializerInterface::class)) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $serializer = $objectManager->create(\Magento\Framework\Serialize\SerializerInterface::class);
-            $value = $serializer->serialize($value);
-        }else{
-            $value = \serialize($value);
-        }
-
-        return is_array($value) ? $value : [];
-    }
 }
