@@ -47,6 +47,11 @@ class Rebuild extends \Magento\Framework\App\Action\Action
     protected $cookieMetadataFactory;
 
     /**
+     * @var \Superb\Recommend\Helper\Data
+     */
+    protected $helper;
+
+    /**
      * @param Context $context
      */
     public function __construct(
@@ -55,7 +60,8 @@ class Rebuild extends \Magento\Framework\App\Action\Action
         \Magento\Checkout\Helper\Cart $cartHelper,
         \Superb\Recommend\Helper\Api $apiHelper,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Superb\Recommend\Helper\Data $helper
     ) {
         parent::__construct($context);
         $this->rebuildHelper = $rebuildHelper;
@@ -63,6 +69,7 @@ class Rebuild extends \Magento\Framework\App\Action\Action
         $this->apiHelper = $apiHelper;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->helper = $helper;
     }
 
     /**
@@ -75,10 +82,10 @@ class Rebuild extends \Magento\Framework\App\Action\Action
         $data = null;
         $messageId = $this->getRequest()->getParam($this->rebuildHelper->getTrackingMessageParamName(),false);
         if ($data = $this->getRequest()->getParam('data',false)) {
-            $data = unserialize($this->rebuildHelper->base64UrlDecode($data));
+            $data = $this->helper->unserialize($this->rebuildHelper->base64UrlDecode($data));
         } elseif (strlen($messageId)) {
             if (is_string($data = $this->apiHelper->getCartRebuildData($messageId))) {
-                $data = unserialize($this->rebuildHelper->base64UrlDecode($data));
+                $data = $this->helper->unserialize($this->rebuildHelper->base64UrlDecode($data));
             }
         }
 

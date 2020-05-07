@@ -17,9 +17,7 @@
 
 namespace Superb\Recommend\Helper\Tracker;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 
 class Data extends \Superb\Recommend\Helper\Data
 {
@@ -40,18 +38,25 @@ class Data extends \Superb\Recommend\Helper\Data
      */
     protected $storeManager;
 
+    /**
+     * @var \Superb\Recommend\Helper\Data
+     */
+    protected $helper;
+
 
     protected $productMetadata;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        ProductMetadataInterface $productMetadata
+        ProductMetadataInterface $productMetadata,
+        \Superb\Recommend\Helper\Data $helper
     )
     {
         $this->scopeConfig = $context->getScopeConfig();
         $this->storeManager = $storeManager;
         $this->productMetadata = $productMetadata;
+        $this->helper = $helper;
         parent::__construct($context);
     }
 
@@ -127,7 +132,7 @@ class Data extends \Superb\Recommend\Helper\Data
             self::XML_PATH_TRACKING_PRODUCT_ATTRIBUTES,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        return $this->unserialize($value);
+        return $this->helper->unserialize($value);
     }
 
     public function getCustomerUpdateAttributes()
@@ -136,20 +141,6 @@ class Data extends \Superb\Recommend\Helper\Data
             self::XML_PATH_TRACKING_CUSTOMER_ATTRIBUTES,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        return $this->unserialize($value);
-    }
-
-    protected function unserialize($value)
-    {
-        if (version_compare($this->productMetadata->getVersion(), '2.2.0', '>=')) {
-            try {
-                $value = ObjectManager::getInstance()->create(SerializerInterface::class)->unserialize($value);
-            } catch (\InvalidArgumentException $invalidArgumentException) {
-                $value = [];
-            }
-        } else {
-            $value = @unserialize($value);
-        }
-        return is_array($value) ? $value : [];
+        return $this->helper->unserialize($value);
     }
 }

@@ -161,6 +161,11 @@ class Tracker extends Tracker\Data
      */
     protected $rebuildHelper;
 
+    /**
+     * @var \Superb\Recommend\Helper\Data
+     */
+    protected $helper;
+
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -188,7 +193,8 @@ class Tracker extends Tracker\Data
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Api\AccountManagementInterface $customerAccountManagement,
         \Magento\Customer\Api\CustomerMetadataInterface $customerMetadataService,
-        ProductMetadataInterface $productMetadata
+        ProductMetadataInterface $productMetadata,
+        \Superb\Recommend\Helper\Data $helper
     ) {
         $this->_salesOrderCollection = $salesOrderCollection;
         $this->cookieManager = $cookieManager;
@@ -216,6 +222,7 @@ class Tracker extends Tracker\Data
         $this->_customerAccountManagement = $customerAccountManagement;
         $this->_customerMetadataService = $customerMetadataService;
         $this->rebuildHelper = $rebuildHelper;
+        $this->helper = $helper;
         parent::__construct(
             $context,
             $this->storeManager,
@@ -513,7 +520,7 @@ class Tracker extends Tracker\Data
                 $data['rebuild']['data'][] = $_item->getBuyRequest();
             }
         }
-        $data['rebuild']['data'] = $this->rebuildHelper->base64UrlEncode(serialize($data['rebuild']['data']));
+        $data['rebuild']['data'] = $this->rebuildHelper->base64UrlEncode($this->helper->serialize($data['rebuild']['data']));
         $data = [
             'setEcommerceData',
             $data

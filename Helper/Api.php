@@ -397,6 +397,6 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         $responseBody = curl_exec($_ch);
         curl_close($_ch);
 
-        return @json_decode($responseBody, true);
+        return \json_decode($responseBody, true);
     }
 }
