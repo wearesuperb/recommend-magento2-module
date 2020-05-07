@@ -139,7 +139,6 @@ class Block extends \Magento\Framework\View\Element\Template
             !(
                 $this->_moduleManager->isEnabled('Magento_PageCache')
                 && !$this->_request->isAjax()
-                && $this->_layout->isCacheable()
             )
         );
     }
