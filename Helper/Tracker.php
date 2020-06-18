@@ -226,7 +226,8 @@ class Tracker extends Tracker\Data
         parent::__construct(
             $context,
             $this->storeManager,
-            $productMetadata
+            $productMetadata,
+            $helper
         );
     }
 
