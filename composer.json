@@ -2,7 +2,7 @@
     "name": "superb/module-recommend",
     "description": "Increase your revenue, drive conversions and transform your eCommerce site today with Recommend",
     "type": "magento2-module",
-    "version": "1.0.18",
+    "version": "1.0.20",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
