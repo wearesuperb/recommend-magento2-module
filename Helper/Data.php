@@ -94,12 +94,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function unserialize($value)
     {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         if (class_exists(\Magento\Framework\Serialize\SerializerInterface::class)) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $serializer = $objectManager->create(\Magento\Framework\Serialize\SerializerInterface::class);
             $value = $serializer->unserialize($value);
         } else {
-            $value = ObjectManager::getInstance()->create('Magento\Framework\Unserialize\Unserialize')->unserialize($value);
+            $value = $objectManager->create('Magento\Framework\Unserialize\Unserialize')->unserialize($value);
         }
         return is_array($value) ? $value : [];
     }
