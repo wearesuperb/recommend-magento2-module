@@ -37,6 +37,10 @@
                     <label>Server URL</label>
                     <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>
                 </field>
+		<field id="track_version" translate="label" type="select" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1">
+		    <label>Tracker Version</label>        
+		    <source_model>Superb\Recommend\Model\Config\Source\Trackversion</source_model>
+		</field>
                 <field id="server_secure_url" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Server Secure URL</label>
                     <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Advanced</frontend_model>

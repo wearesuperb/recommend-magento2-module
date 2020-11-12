@@ -16,9 +16,20 @@
  */
 ?>
 <div id=<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($this->getSlotId());?>></div>
-<script type="text/javascript">
-//<![CDATA[
-    var _taq = _taq || [];
-    _taq.push(["loadRecommendationSlotToId",<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($this->getSlotId());?><?php echo is_array($this->getOptions())&&count($this->getOptions())?",".$this->getJsonOptions():'';?>]);
-//]]>
-</script>
+<?php $trackerHelper = $this->helper('Superb\Recommend\Helper\Tracker'); ?>
+                                                     
+<?php if ($trackerHelper->getTrackerVersion() == '35') : ?>
+    <script type="text/javascript">
+    //<![CDATA[
+        var __rtaq = __rtaq || [];
+        __rtaq.push(["loadRecommendationSlotToId",<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($this->getSlotId());?><?php echo is_array($this->getOptions())&&count($this->getOptions())?",".$this->getJsonOptions():'';?>]);
+    //]]>
+    </script>
+<?php else : ?> 
+    <script type="text/javascript">
+    //<![CDATA[
+        var _taq = _taq || [];
+        _taq.push(["loadRecommendationSlotToId",<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($this->getSlotId());?><?php echo is_array($this->getOptions())&&count($this->getOptions())?",".$this->getJsonOptions():'';?>]);
+    //]]>
+    </script>
+<?php endif ?>

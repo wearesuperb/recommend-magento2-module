@@ -27,6 +27,7 @@ class Data extends \Superb\Recommend\Helper\Data
     const XML_PATH_TRACKING_MEDIA_THUMB_SOURCE  = 'superbrecommend/panels/media_thumb_source';
     const XML_PATH_TRACKING_MEDIA_THUMB_WIDTH   = 'superbrecommend/panels/media_thumb_width';
     const XML_PATH_TRACKING_MEDIA_THUMB_HEIGHT  = 'superbrecommend/panels/media_thumb_height';
+    const XML_PATH_TRACKING_VERSION  		    = 'superbrecommend/general_settings/track_version';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -75,18 +76,40 @@ class Data extends \Superb\Recommend\Helper\Data
         }
     }
 
+    public function getTrackerVersion()
+    {
+	    return $this->scopeConfig->getValue(
+                self::XML_PATH_TRACKING_VERSION,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+    }
+
     public function getApiJsUrl()
     {
-        if ($this->storeManager->getStore()->isCurrentlySecure()) {
-            return $this->scopeConfig->getValue(
-                self::XML_PATH_TRACKING_URL_SECURE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ).'trackerv14.js';
+        if ($this->getTrackerVersion()=='35') {
+            if ($this->storeManager->getStore()->isCurrentlySecure()) {
+                    return $this->scopeConfig->getValue(
+                        self::XML_PATH_TRACKING_URL_SECURE,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ).'trackerv35.js';
+            } else {
+                return $this->scopeConfig->getValue(
+                        self::XML_PATH_TRACKING_URL,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ).'trackerv35.js';
+            }
         } else {
-            return $this->scopeConfig->getValue(
-                self::XML_PATH_TRACKING_URL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ).'trackerv14.js';
+            if ($this->storeManager->getStore()->isCurrentlySecure()) {
+                    return $this->scopeConfig->getValue(
+                        self::XML_PATH_TRACKING_URL_SECURE,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ).'trackerv14.js';
+            } else {
+                return $this->scopeConfig->getValue(
+                        self::XML_PATH_TRACKING_URL,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ).'trackerv14.js';
+            }
         }
     }
 
