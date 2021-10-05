@@ -8,7 +8,7 @@ Get Started
 Go to [Recommend.pro](https://recommend.pro/) and [Register](https://control.recommend.pro/signup)
 
 How to install
-* Download the <a href="https://github.com/wearesuperb/recommend-magento2-module/archive/3.0.0.zip">Recommend Module</a>, unpack it and upload its contents to a new folder ```<root>/app/code/Superb/Recommend/``` of your Magento 2 installation
+* Download the <a href="https://github.com/wearesuperb/recommend-magento2-module/archive/refs/heads/V3.0.0.zip">Recommend Module</a>, unpack it and upload its contents to a new folder ```<root>/app/code/Superb/Recommend/``` of your Magento 2 installation
 * Enable Recommend Module
 ```sh
     $ php bin/magento module:enable Superb_Recommend
