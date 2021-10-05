@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * Superb_Recommend
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0), a
+ * copy of which is available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * @category   Superb
+ * @package    Superb_Recommend
+ * @author     Superb <hello@wearesuperb.com>
+ * @copyright  Copyright (c) 2020 Superb Media Limited
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_predispatch_adminhtml_system_config_edit">
+        <observer name="superbrecommend_system_config_edit" instance="Superb\Recommend\Observer\SaveSystemConfig" />
+    </event>
+    <event name="newsletter_subscriber_save_after">
+        <observer name="superbrecommend_subscriber" instance="Superb\Recommend\Observer\Subscriber"/>
+    </event>
+    <event name="customer_save_after">
+        <observer name="superbrecommend_customer" instance="Superb\Recommend\Observer\AfterCustomer"/>
+    </event>
+    <event name="catalog_category_save_after">
+        <observer name="superbrecommend_category" instance="Superb\Recommend\Observer\AfterCategory"/>
+    </event>
+    <event name="catalog_product_save_after">
+        <observer name="superbrecommend_product" instance="Superb\Recommend\Observer\AfterProduct"/>
+    </event>
+    <event name="checkout_cart_add_product_complete">
+        <observer name="superbrecommend_addtocart" instance="Superb\Recommend\Observer\AddToCart"/>
+    </event>
+    <event name="sales_quote_save_after">
+        <observer name="superbrecommend_quotesave" instance="Superb\Recommend\Observer\Quotesave"/>
+    </event>
+    <event name="sales_order_place_after">
+        <observer name="superbrecommend_success" instance="Superb\Recommend\Observer\AfterOrder"/>
+    </event>
+</config>

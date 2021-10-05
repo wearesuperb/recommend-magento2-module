@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @var $block \Superb\Recommend\Block\Code
+ */
+$accountId = $block->accountId();
+$actionName = $block->actionName();
+$currentURL = $block->currentURL();
+$productSku = $block->productSku();
+$categoryId = $block->categoryId();
+$websiteId = $block->getWebsiteCode();
+$currency = $block->getCurrencyCode();
+$environment = $block->getEnvironment();
+$orderId = $block->getOrderId();
+?>
+
+<script type="text/x-magento-init">
+    {
+    "*":
+    {
+            "Superb_Recommend/js/code": {
+                "accountId" : "<?php echo $accountId; ?>",
+                "actionName" : "<?php echo $actionName; ?>",
+                "currentURL" : "<?php echo $currentURL; ?>",
+                "productSku" : "<?php echo $productSku; ?>",
+                "categoryId" : "<?php echo $categoryId; ?>",
+                "websiteId" : "<?php echo $websiteId; ?>",
+                "currency" : "<?php echo $currency; ?>",
+                "environment" : "<?php echo $environment; ?>",
+                "orderId" : "<?php echo $orderId; ?>"
+            }
+        }
+    }
+</script>

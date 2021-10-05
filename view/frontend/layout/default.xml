@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="after.body.start">
+            <block class="Superb\Recommend\Block\Code"
+                   name="superbrecommend.tracking.code"
+                   template="Superb_Recommend::tracking_code.phtml"
+                   before="-"
+                   ifconfig="superbrecommend/general_settings/enabled" />
+            <block class="Magento\Framework\View\Element\Template" name="superbrecommend.addtocart" after="superbrecommend.tracking.code"
+                   ifconfig="superbrecommend/general_settings/enabled"
+                   template="Superb_Recommend::addtocart.phtml">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="recommendAddToCart" xsi:type="array">
+                                <item name="component" xsi:type="string">Superb_Recommend/js/addtocart</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

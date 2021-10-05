@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="recommend_panel" class="Superb\Recommend\Block\Code">
+        <label translate="true">Recommend Panel</label>
+        <description>Recommend - Personalised Recommendations</description>
+        <parameters>
+            <parameter name="title" xsi:type="text" required="true" visible="true">
+                <label translate="true">Panel Title</label>
+            </parameter>
+            <parameter name="description" xsi:type="text" required="false" visible="true">
+                <label translate="true">Panel Description</label>
+            </parameter>
+            <parameter name="paneltype" xsi:type="select" visible="true" required="true"
+                       source_model="Superb\Recommend\Model\Config\Source\Paneltype">
+                <label translate="true">Panel Type</label>
+            </parameter>
+            <parameter name="panelid" xsi:type="select" visible="true" required="true"
+                       source_model="Superb\Recommend\Model\Config\Source\Panelid">
+                <label translate="true">Panel</label>
+            </parameter>
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="default" value="Superb_Recommend::widget/panel.phtml" selected="true">
+                        <label translate="true">Recommend Panel Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+
+    </widget>
+</widgets>

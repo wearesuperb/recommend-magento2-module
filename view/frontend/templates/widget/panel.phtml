@@ -1,0 +1,92 @@
+<?php
+    $scope = 'recommend-panel-'.$block->getPanelId();
+    $recommendEnable = $block->getRecommendEnable();
+    $recommendRelatedProductSkus = $recommendEnable ? $block->getRelatedRecommendProductSkus() : '';
+    $recommendPanelId = "product-magento-recommend";
+
+    // ko
+    // If item.original_price > item.price then item have sale and need to show discount percent
+    //
+?>
+
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "<?= $scope ?>": {
+                    "component": "Superb_Recommend/js/panel",
+                    "action": "<?= $block->actionName() ?>",
+                    "panel_type": "<?= $block->getPanelType() ?>",
+                    "accountId": "<?= $block->accountId() ?>",
+                    "store_code": "<?= $block->getWebsiteCode() ?>",
+                    "currency_code": "<?= $block->getCurrencyCode() ?>",
+                    "price_list": "<?= $block->getPriceList() ?>",
+                    "panel_id": "<?= $block->getPanelid() ?>",
+                    "current_sku": "<?= $block->productSku() ?>",
+                    "listId": "<?= $block->categoryId() ?>",
+                    "title": "<?= $block->getTitle() ?>",
+                    "description": "<?= $block->getDescription() ?>",
+                    "custom_text": "<?= $block->getCustomText() ?>",
+                    "skus": <?= json_encode($block->getSkusFromBasketPage()) ?>,
+                    "recommend_skus": <?= json_encode($recommendRelatedProductSkus) ?>,
+                    "recommend_panel_id": "<?= $recommendPanelId ?>"
+                }
+            }
+        }
+    }
+}
+</script>
+
+
+<div data-bind="scope: '<?= $scope ?>'" class="widget block block-static-block">
+<!-- ko if: items.length > 0-->
+    <div class="content-heading">
+        <h2 class="title" data-bind="text: title"></h2>
+        <p class="info" data-bind="text: description"></p>
+    </div>
+    <div class="block widget block-products-list grid">
+        <div class="block-content">
+            <div class="products-grid grid">
+                <ol class="product-items widget-product-grid">
+                    <!-- ko foreach: { data: items, as: 'item' } -->
+                    <li class="product-item">
+                        <div class="product-item-info">
+                            <a data-bind="attr:{href: item.url, title: item.name}" class="product-item-photo">
+                            	<span class="product-image-container" style="width:240px;">
+                                    <span class="product-image-wrapper" style="padding-bottom: 125%;">
+                                        <img data-bind="attr:{src: item.image, alt: item.name}" class="product-image-photo" width="240" height="300">
+                                  	</span>
+                                </span>
+                            </a>
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
+                                    <a data-bind="text:item.name,attr:{href: item.url, title: item.name}" class="product-item-link"></a>
+                                </strong>
+                                <div class="price-box price-final_price" data-role="priceBox">
+                                    <span class="price-container price-final_price tax weee">
+                                        <span id="old-price-6-widget-product-grid" class="price-wrapper ">
+                                            <span data-bind="text:'<?= $block->getCurrencySymbol() ?>'+item.price.toFixed(2)" class="price"></span>
+                                        </span>
+                                    </span>
+                                    <!-- ko if: item.original_price > item.price -->
+                                    <span class="old-price">
+                                        <span class="price-container price-final_price tax weee">
+                                            <span class="price-wrapper">
+                                                <span data-bind="text:'<?= $block->getCurrencySymbol() ?>'+item.original_price.toFixed(2)" class="price"></span>
+                                            </span>
+                                        </span>
+                                    </span>
+                                    <!-- /ko -->
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- /ko -->
+                </ol>
+            </div>
+        </div>
+    </div>
+<!-- /ko -->
+</div>
+

@@ -1,0 +1,19 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="recommend_product_position"
+           resource="default"
+           engine="innodb"
+           comment="table for module Superb_Recommend">
+
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID" />
+        <column xsi:type="varchar" name="category_id" length="255" nullable="false" comment="Category ID" />
+        <column xsi:type="varchar" name="product_sku" length="255" nullable="false" comment="Product SKU" />
+        <column xsi:type="varchar" name="recommend_position" length="255" nullable="false" comment="Recommend Position" />
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+
+    </table>
+</schema>
+
