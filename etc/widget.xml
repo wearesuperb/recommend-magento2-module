@@ -8,7 +8,7 @@
             <parameter name="title" xsi:type="text" required="true" visible="true">
                 <label translate="true">Panel Title</label>
             </parameter>
-            <parameter name="description" xsi:type="text" required="false" visible="true">
+            <parameter name="description" xsi:type="text" required="true" visible="true">
                 <label translate="true">Panel Description</label>
             </parameter>
             <parameter name="paneltype" xsi:type="select" visible="true" required="true"

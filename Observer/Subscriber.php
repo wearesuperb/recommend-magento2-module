@@ -19,10 +19,28 @@ class Subscriber implements ObserverInterface
      */
     protected $_apiHelper;
 
+    /**
+     * @var \Superb\Recommend\Model\SessionFactory
+     */
+    protected $recommendSession;
+
+    /**
+     * @var \Superb\Recommend\Helper\Data
+     */
+    protected $helper;
+
+    protected $storeManager;
+
     public function __construct(
-        \Superb\Recommend\Helper\Api $apiHelper
+        \Superb\Recommend\Helper\Api $apiHelper,
+        \Superb\Recommend\Model\SessionFactory $recommendSession,
+        \Superb\Recommend\Helper\Data $helper,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_apiHelper = $apiHelper;
+        $this->recommendSession = $recommendSession;
+        $this->helper = $helper;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -33,6 +51,7 @@ class Subscriber implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        /** @var  $item */
         $item = $observer->getEvent()->getSubscriber();
         $subscriberStatus = $item->getSubscriberStatus();
 
@@ -53,7 +72,6 @@ class Subscriber implements ObserverInterface
                 'subscription_status_change_date' => strtotime($item->getChangeStatusAt())
             ]
         ];
-        $this->_apiHelper->sendChennelData($channelData);
 
         if ($item->getCustomerId()==0) {
             $customerData = [];
@@ -65,7 +83,13 @@ class Subscriber implements ObserverInterface
             ];
             $this->_apiHelper->sendCustomer($customerData);
         }
-        
+        $this->_apiHelper->sendChennelData($channelData);
+        $this->recommendSession->create()->setAddSubscribe(
+            [
+                'email_hash' => hash_hmac('sha256', $item->getSubscriberEmail(), $this->helper->getHashSecretKey($this->storeManager->getStore()->getId()))
+            ]
+        );
+
         return $this;
     }
 }

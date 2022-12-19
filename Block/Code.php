@@ -22,7 +22,15 @@ class Code extends \Magento\Framework\View\Element\Template implements \Magento\
      */
     protected $checkoutSession;
 
-    protected $recommend;
+    /**
+     * @var \Magento\Catalog\Model\ProductRepository
+     */
+    protected $productRepository;
+
+    /**
+     * @var array
+     */
+    protected $skusInCondition = [];
 
     /**
      * Code constructor.
@@ -38,7 +46,7 @@ class Code extends \Magento\Framework\View\Element\Template implements \Magento\
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Checkout\Model\SessionFactory $checkoutSession,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Superb\Recommend\Model\Recommend $recommend,
+        \Magento\Catalog\Model\ProductRepository $productRepository,
         array $data = []
     ) {
         $this->storeManager  = $context->getStoreManager();
@@ -46,7 +54,7 @@ class Code extends \Magento\Framework\View\Element\Template implements \Magento\
         $this->coreRegistry = $coreRegistry;
         $this->checkoutSession = $checkoutSession;
         $this->priceCurrency = $priceCurrency;
-        $this->recommend = $recommend;
+        $this->productRepository = $productRepository;
         parent::__construct($context, $data);
     }
 
@@ -109,11 +117,6 @@ class Code extends \Magento\Framework\View\Element\Template implements \Magento\
     public function getCurrencyCode()
     {
         return $this->helper->getCurrencyCode();
-    }
-
-    public function getCurrencySymbol()
-    {
-        return $this->helper->getCurrencySymbol();
     }
 
     public function getEnvironment()
@@ -180,30 +183,80 @@ class Code extends \Magento\Framework\View\Element\Template implements \Magento\
         return json_encode($data);
     }
 
-    public function getRelatedRecommendProductSkus()
+    /**
+     * @return string
+     */
+    public function getPanelid(): string
     {
-        $currentProduct = $this->coreRegistry->registry('current_product');
-
-        if($currentProduct) {
-            $skus = $this->recommend->getRecommendProductSkus($currentProduct);
-
-            if($skus) {
-                return json_encode($skus);
-            }
-
-            return '';
+        if (!$this->isSetCondition()) {
+            return $this->getData('panelid');
         }
 
-        return '';
+        $skusFromCart = json_decode($this->getSkusFromBasketPage());
+        foreach ($this->skusInCondition as $sku) {
+            if (in_array($sku, $skusFromCart)) {
+                if ($this->getData('special_panelid') !== null) {
+                    return $this->getData('special_panelid');
+                }
+            }
+        }
+        return $this->getData('panelid');
     }
 
-    public function getRecommendEnable() {
-        $currentProduct = $this->coreRegistry->registry('current_product');
-
-        if($currentProduct) {
-            return $currentProduct->getRecommendEnable() ?: 0;
+    public function isSetCondition(): bool
+    {
+        if ($this->getData('condition_products_skus') !== null && trim($this->getData('condition_products_skus')) === "") {
+            return false;
         }
 
-        return '';
+        $skusString = $this->getData('condition_products_skus') ?? '';
+        $skusArray = explode(',', $skusString);
+        $existSku = [];
+        foreach ($skusArray as $sku) {
+            $sku = trim($sku);
+            if ($sku === "") {
+                continue;
+            }
+            try {
+                $product = $this->productRepository->get($sku, false, $this->_storeManager->getStore()->getId());
+                if ($product->getId()) {
+                    $existSku[] = $sku;
+                }
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            }
+        }
+
+        if (!count($existSku)) {
+            return false;
+        }
+
+        $this->skusInCondition = $existSku;
+        return true;
+    }
+
+    public function getSpecialProductsSkus(): string
+    {
+        $specialSkus = [];
+        if ($this->getData('special_products_skus') !== null && trim($this->getData('special_products_skus')) === "") {
+            return json_encode($specialSkus);
+        }
+        $skusArray = [];
+        $tempSkusArray = explode(',', $this->getData('special_products_skus') ?? '');
+        foreach ($tempSkusArray as $sku) {
+            $sku = trim($sku);
+            if ($sku === "") {
+                continue;
+            }
+            $skusArray[] = $sku;
+        }
+        return json_encode($skusArray);
+    }
+
+    public function getConditionProductsSkus(): string
+    {
+        if ($this->isSetCondition()) {
+            return json_encode($this->skusInCondition);
+        }
+        return json_encode([]);
     }
 }

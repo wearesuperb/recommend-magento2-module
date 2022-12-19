@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <!--
    Superb_Recommend
 
@@ -12,7 +13,7 @@
    @author     Superb <hello@wearesuperb.com>
    @copyright  Copyright (c) 2015 Superb Media Limited
    @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- -->
+-->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <virtualType name="Superb\Recommend\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
@@ -32,7 +33,7 @@
     <type name="Superb\Recommend\Logger\Logger">
         <arguments>
             <argument name="name" xsi:type="string">recommendLogger</argument>
-            <argument name="handlers" xsi:type="array">
+            <argument name="handlers"  xsi:type="array">
                 <item name="system" xsi:type="object">Superb\Recommend\Logger\Handler</item>
             </argument>
         </arguments>
@@ -41,28 +42,13 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="superbrecommend_sync" xsi:type="object">Superb\Recommend\Console\Command\Sync</item>
+                <item name="superbrecommend_update" xsi:type="object">Superb\Recommend\Console\Command\Update</item>
+                <item name="superbrecommend_position" xsi:type="object">Superb\Recommend\Console\Command\Position</item>
+                <item name="superbrecommend_webhook" xsi:type="object">Superb\Recommend\Console\Command\Webhook</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
-        <arguments>
-            <argument name="constructors" xsi:type="array">
-                <item name="recommend" xsi:type="string">Superb\Recommend\Model\Product\CopyConstructor\Recommend</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Model\Product\LinkTypeProvider">
-        <arguments>
-            <argument name="linkTypes" xsi:type="array">
-                <item name="recommend" xsi:type="const">Superb\Recommend\Model\Product\Link::LINK_TYPE_RECOMMEND</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Model\ProductLink\CollectionProvider">
-        <arguments>
-            <argument name="providers" xsi:type="array">
-                <item name="recommend" xsi:type="object">Superb\Recommend\Model\ProductLink\CollectionProvider\Recommend</item>
-            </argument>
-        </arguments>
+    <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
+        <plugin name="Superb_Recommend::applyPositionSort" type="Superb\Recommend\Plugin\Product\ProductList\Toolbar" sortOrder="100"/>
     </type>
 </config>

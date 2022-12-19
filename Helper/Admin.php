@@ -98,10 +98,15 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getSystemConfigStoreId()
     {
-        if (self::$_systemConfigStoreId === -1){
-            if($this->_getRequest()->getParam('website')){
-                self::$_systemConfigStoreId = $this->_getRequest()->getParam('website');
-            }else{
+        if (self::$_systemConfigStoreId==-1) {
+            if (!is_null($this->_getRequest()->getParam('store'))) {
+                self::$_systemConfigStoreId = $this->_getRequest()->getParam('store');
+            } elseif (!is_null($this->_getRequest()->getParam('website'))) {
+                self::$_systemConfigStoreId = $this->storeWebsiteFactory->create()
+                    ->load($this->_getRequest()->getParam('website'))
+                    ->getDefaultStore()
+                    ->getId();
+            } else {
                 self::$_systemConfigStoreId = null;
             }
         }

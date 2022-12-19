@@ -19,58 +19,58 @@
         <tab id="superbrecommend" translate="label" sortOrder="210">
             <label>RECOMMEND</label>
         </tab>
-        <section id="superbrecommend" translate="label" type="text" sortOrder="2000" showInDefault="1" showInWebsite="1" showInStore="0">
+        <section id="superbrecommend" translate="label" type="text" sortOrder="2000" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
             <label>Settings</label>
             <tab>superbrecommend</tab>
             <resource>Superb_Recommend::config_superbrecommend</resource>
-            <group id="general_settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="general_settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General Settings</label>
-                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="account_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="account_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Account Id</label>
                 </field>
-                <field id="api_key" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="api_key" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>API Key</label>
                     <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Obscure</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="hashcode" translate="label" type="obscure" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="hashcode" translate="label" type="obscure" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>API Hash Key</label>
                     <frontend_model>Superb\Recommend\Block\System\Config\Form\Field\Obscure</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="product_attributes" translate="label comment" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="product_attributes" translate="label comment" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Additional product attributes</label>
                     <frontend_model>Superb\Recommend\Block\Adminhtml\System\Config\Form\FieldArray\Product\Attributes</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                     <comment>Attributes to track on product view page.</comment>
                 </field>
-                <field id="customer_attributes" translate="label comment" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="customer_attributes" translate="label comment" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Additional customer attributes</label>
                     <frontend_model>Superb\Recommend\Block\Adminhtml\System\Config\Form\FieldArray\Customer\Attributes</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                     <comment>Attributes to track on customer login.</comment>
                 </field>
             </group>
-            <group id="panels" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="panels" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Recommendation Panels</label>
-                <field id="show_out_of_stock_products" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="show_out_of_stock_products" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show out of stock products</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="media_thumb_source" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="media_thumb_source" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Thumbnail source</label>
                     <source_model>Superb\Recommend\Model\System\Config\Source\Thumbnail</source_model>
                 </field>
-                <field id="media_thumb_width" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="media_thumb_width" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Thumbnail width</label>
                     <comment>in pixels.</comment>
                 </field>
-                <field id="media_thumb_height" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="media_thumb_height" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Thumbnail height</label>
                     <comment>in pixels.</comment>
                 </field>
@@ -97,6 +97,17 @@
                     <label>Frequency</label>
                     <source_model>Superb\Recommend\Model\System\Config\Source\Cron\Frequency</source_model>
                     <backend_model>Superb\Recommend\Model\System\Config\Backend\Cron</backend_model>
+                </field>
+            </group>
+            <group id="promo_dob_cron" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Birthday Coupon</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="frequency" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Frequency</label>
+                    <comment><![CDATA[e.g. <i>00 11 * * *</i> - at 11:00 a.m. every day]]></comment>
                 </field>
             </group>
         </section>

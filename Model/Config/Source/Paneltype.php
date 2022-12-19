@@ -23,28 +23,28 @@ class Paneltype implements \Magento\Framework\Option\ArrayInterface
 
     public function toOptionArray()
     {
-        $options = [];
-        $options[] = [
-            'value' => 'product',
-            'label' => 'Product Detail'
+        $options = [
+            [
+                'value' => 'product',
+                'label' => 'Product Detail'
+            ],
+            [
+                'value' => 'category',
+                'label' => 'Category'
+            ],
+            [
+                'value' => 'cms',
+                'label' => 'CMS'
+            ],
+            [
+                'value' => 'search',
+                'label' => 'Search'
+            ],
+            [
+                'value' => 'basket',
+                'label' => 'Basket'
+            ]
         ];
-	$options[] = [
-            'value' => 'category',
-            'label' => 'Category'
-        ];
-	$options[] = [
-            'value' => 'cms',
-            'label' => 'CMS'
-        ];
-	$options[] = [
-            'value' => 'search',
-            'label' => 'Seacrh'
-        ];
-	$options[] = [
-            'value' => 'basket',
-            'label' => 'Basket'
-        ];
-
         return $options;
     }
 }

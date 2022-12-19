@@ -30,6 +30,10 @@
                 <enabled>1</enabled>
                 <frequency>daily</frequency>
             </data_cron>
+            <promo_dob_cron>
+                <enabled>0</enabled>
+                <frequency>00 01 * * *</frequency>
+            </promo_dob_cron>
         </superbrecommend>
     </default>
 </config>

@@ -5,6 +5,7 @@
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="recommend-addtocart" xsi:type="string">Superb\Recommend\Block\AddToCart</item>
+                <item name="recommend-subscribe" xsi:type="string">Superb\Recommend\Block\Subscribe</item>
                 <item name="superbrecommend" xsi:type="string">Superb\Recommend\Block\Customerdata</item>
             </argument>
         </arguments>

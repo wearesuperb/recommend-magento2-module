@@ -45,10 +45,11 @@ class SaveSystemConfig implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $websiteId = $this->_adminHelper->getSystemConfigStoreId();
+        $storeId = $this->_adminHelper->getSystemConfigStoreId();
         $config = $observer->getEvent()->getConfig();
-        $this->_apiHelper->updateAccount($websiteId);
-
+        
+        $this->_apiHelper->updateAccount('base');
+        
         return $this;
     }
 }

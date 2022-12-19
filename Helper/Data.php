@@ -16,7 +16,10 @@
  */
 namespace Superb\Recommend\Helper;
 
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Newsletter\Model\Subscriber;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -24,6 +27,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_ACCOUNT_ID                   = 'superbrecommend/general_settings/account_id';
     const XML_PATH_DATA_CRON_ENABLED            = 'superbrecommend/data_cron/enabled';
     const XML_PATH_STATUS_CRON_ENABLED          = 'superbrecommend/status_cron/enabled';
+    const XML_PATH_STATUS_CRON_PROMO_DOB        = 'superbrecommend/promo_dob_cron/enabled';
     const XML_PATH_STATUS_HASHCODE              = 'superbrecommend/general_settings/hashcode';
     const LIMIT_STEP                            = 1000;
 
@@ -44,14 +48,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_encryptor;
 
+    /**
+     * @var CollectionFactory
+     */
+    protected $categoryCollection;
+
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\App\Helper\Context $context
+        \Magento\Framework\App\Helper\Context $context,
+        CollectionFactory $categoryCollection
     ) {
         $this->storeManager = $storeManager;
         $this->_encryptor = $encryptor;
         $this->scopeConfig = $context->getScopeConfig();
+        $this->categoryCollection = $categoryCollection;
         parent::__construct($context);
     }
 
@@ -61,19 +72,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             self::XML_PATH_ENABLED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
-        );
-    }
-
-    /**
-     * @param $websiteId
-     * @return bool
-     */
-    public function isEnabledWebSiteScope($websiteId)
-    {
-        return (bool)$this->scopeConfig->getValue(
-            self::XML_PATH_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
-            $websiteId
         );
     }
 
@@ -90,6 +88,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_STATUS_CRON_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function isStatusCronPromoDobEnabled($storeId = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_STATUS_CRON_PROMO_DOB,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
@@ -122,11 +129,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCurrencyCode()
     {
         return $this->storeManager->getStore()->getCurrentCurrency()->getCode();
-    }
-
-    public function getCurrencySymbol()
-    {
-        return $this->storeManager->getStore()->getCurrentCurrency()->getCurrencySymbol();
     }
 
     public function getCurrentStore()
@@ -209,5 +211,30 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         ];
 
         return $batchData;
+    }
+
+    public function getWebsitesList(): array
+    {
+        return $this->storeManager->getWebsites();
+    }
+
+    public function getCategoryCollection($rootCatId)
+    {
+        try {
+            return $this->categoryCollection->create()
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('path', array('like' => "1/{$rootCatId}/%"));
+        } catch (LocalizedException $e) {
+        }
+    }
+
+    public function getStatusMapRecommend($data): ?int
+    {
+        $map = [
+            'subscribed' => Subscriber::STATUS_SUBSCRIBED,
+            'unsubscribed' => Subscriber::STATUS_UNSUBSCRIBED,
+            'non_subscribed' => Subscriber::STATUS_NOT_ACTIVE
+        ];
+        return $map[$data] ?? null;
     }
 }

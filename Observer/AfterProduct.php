@@ -2,6 +2,7 @@
 namespace Superb\Recommend\Observer;
 
 use Exception;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -87,7 +88,26 @@ class AfterProduct implements ObserverInterface
                                 'url' => $enviroment['url'],
                                 'image' => $enviroment['image'],
                                 'description' => $enviroment['description'],
-				                'stock_quantity' => $enviroment['stock_quantity'],
+				'stock_quantity' => $enviroment['stock_quantity'],
+                                'attributes' => $enviroment['attributes'],
+                                'price' => $enviroment['price'],
+                                'original_price' => $enviroment['original_price']
+                            ]
+                        ];
+                    }
+                }
+                if (isset($data['childs'])) {
+                    foreach($data['childs'] as $enviroment) {
+                        $env[] = [
+                            'code' => $store->getCode(),
+                            'data' => [
+                                'status' => $enviroment['status'],
+                                'name' => $enviroment['name'],
+                                'lists' => $enviroment['lists'],
+                                'url' => $enviroment['url'],
+                                'image' => $enviroment['image'],
+                                'description' => $enviroment['description'],
+				'stock_quantity' => $enviroment['stock_quantity'],
                                 'attributes' => $enviroment['attributes'],
                                 'price' => $enviroment['price'],
                                 'original_price' => $enviroment['original_price']
@@ -110,7 +130,7 @@ class AfterProduct implements ObserverInterface
                             'url'=> $_product['url'],
                             'image'=> $_product['image'],
                             'description'=> $_product['description'],
-			                'stock_quantity'=> $_product['stock_quantity'],
+			    'stock_quantity'=> $_product['stock_quantity'],
                             'attributes'=> $_product['attributes'],
                             'environment'=> $env,
                             'price'=> $_product['price'],
@@ -119,6 +139,30 @@ class AfterProduct implements ObserverInterface
                     ];
 
                     $this->_apiHelper->uploadProducts($batch,$_website->getCode());
+                }
+            }
+            if (isset($product[$_website->getCode()][$_website->getDefaultStore()->getCode()]['childs'])) {
+                foreach($product[$_website->getCode()][$_website->getDefaultStore()->getCode()]['childs'] as $_variant){
+                    $batch[] = [
+                        'action' => 'upsert_update',
+                        'data' => [
+                            'id' =>$_variant['id'],
+                            'master_sku' =>$_variant['parent'],
+                            'status' => $_variant['status'],
+                            'sku'=> $_variant['sku'],
+                            'name'=> $_variant['name'],
+                            'lists'=> $_variant['lists'],
+                            'url'=> $_variant['url'],
+                            'image'=> $_variant['image'],
+                            'description'=> $_variant['description'],
+                            'attributes'=> $_variant['attributes'],
+                            'environment'=> $env,
+                            'price'=> $_variant['price'],
+                            'original_price'=> $_variant['original_price']
+                        ]
+                    ];
+
+                    $this->_apiHelper->uploadVariants($batch,$_website->getCode());
                 }
             }
         }
@@ -138,11 +182,12 @@ class AfterProduct implements ObserverInterface
     protected function getProductByStore($store,$productAttributes,$id)
     {
         $productsCollection = $this->getProducts($store->getId(),$id);
-	    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-	    $stockItem = $objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$stockItem = $objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
 
         $data = [];
         foreach($productsCollection as $_product){
+//var_dump($_product->getExtensionAttributes()->getStockItem());die;
 	    $productStock = $stockItem->getStockItem($_product->getEntityId());
             $attributes=[];
             foreach($productAttributes as $productAttribute){
@@ -171,13 +216,15 @@ class AfterProduct implements ObserverInterface
                 ]]
             ];
 
+            $parents = $this->_catalogProductTypeConfigurable->getParentIdsByChild($_product->getId());
+
             $array = [
                 'id'=>$_product->getId(),
-                'status'=>$productStock->getIsInStock(),
+                'status'=> $this->isItEnabled($_product, $productStock),
                 'sku'=>$_product->getSku(),
                 'name'=>$_product->getName(),
                 'lists'=>$_product->getCategoryIds(),
-		        'stock_quantity'=>(int)$productStock->getQty(),
+		'stock_quantity'=>$productStock->getQty(),
                 'url'=>$_product->getProductUrl(),
                 'image'=>$store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' .$_product->getImage(),
                 'description'=>$_product->getShortDescription()?$_product->getShortDescription():'',
@@ -186,8 +233,33 @@ class AfterProduct implements ObserverInterface
                 'original_price'=>$original_price
             ];
 
-            $data['products'][$_product->getId()] = $array;
+            if (isset($parents[0])) {
+                $array['parent'] = $parents[0];
+                $data['childs'][$_product->getId()] = $array;
+            } else {
+                $data['products'][$_product->getId()] = $array;
+            }
+
         }
         return $data;
+    }
+
+    private function isItEnabled($_product, $productStock): bool
+    {
+        if ($_product->getStatus() == ProductStatus::STATUS_DISABLED) {
+            return false;
+        }
+
+        if (!$productStock->getIsInStock()) {
+            return false;
+        }
+
+        $regularPrice = $_product->getPriceInfo()->getPrice('regular_price');
+
+        if ($regularPrice && $regularPrice->getValue() <= 0) {
+            return false;
+        }
+
+        return true;
     }
 }

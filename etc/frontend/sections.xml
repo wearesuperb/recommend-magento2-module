@@ -4,4 +4,7 @@
     <action name="checkout/cart/add">
         <section name="recommend-addtocart"/>
     </action>
+    <action name="*">
+        <section name="recommend-subscribe"/>
+    </action>
 </config>

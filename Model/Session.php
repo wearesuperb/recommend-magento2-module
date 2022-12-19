@@ -18,6 +18,9 @@ namespace Superb\Recommend\Model;
 
 /**
  * Recommend session model
+ * @method setData(string $string, array $data)
+ * @method unsetData(string $string)
+ * @method hasData(string $string)
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -25,7 +28,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param array $data
      * @return \Superb\Recommend\Model\Session $this
      */
-    public function setAddToCart($data)
+    public function setAddToCart(array $data): Session
     {
         $this->setData('add_to_cart', $data);
         return $this;
@@ -47,8 +50,39 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @return bool
      */
-    public function hasAddToCart()
+    public function hasAddToCart(): bool
     {
         return $this->hasData('add_to_cart');
+    }
+
+    /**
+     * @param array $data
+     * @return \Superb\Recommend\Model\Session $this
+     */
+    public function setAddSubscribe(array $data): Session
+    {
+        $this->setData('add_subscribe', $data);
+        return $this;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getAddSubscribe()
+    {
+        if ($this->hasAddSubscribe()) {
+            $data = $this->getData('add_subscribe');
+            $this->unsetData('add_subscribe');
+            return $data;
+        }
+        return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAddSubscribe(): bool
+    {
+        return $this->hasData('add_subscribe');
     }
 }

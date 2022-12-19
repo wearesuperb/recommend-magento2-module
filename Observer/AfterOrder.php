@@ -13,20 +13,13 @@ class AfterOrder implements ObserverInterface
     protected $_helperApi;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * AfterOrder constructor.
      * @param \Superb\Recommend\Helper\Api $api
      */
     public function __construct(
-        \Superb\Recommend\Helper\Api $api,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Superb\Recommend\Helper\Api $api
     ) {
         $this->_helperApi           = $api;
-        $this->storeManager = $storeManager;
     }
 
     /**

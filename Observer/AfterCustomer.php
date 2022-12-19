@@ -43,8 +43,8 @@ class AfterCustomer implements ObserverInterface
         $attributes = [];
         foreach($customerAttributes as $attribute){
             $attributes[] = [
-                'code' => (string)$attribute['magento_attribute'],
-                'value' => (string)$item->getData($attribute['magento_attribute'])
+                'code' => $attribute['magento_attribute'],
+                'value' => $item->getData($attribute['magento_attribute'])
             ];
         }
 
@@ -61,6 +61,7 @@ class AfterCustomer implements ObserverInterface
                 'register_date' => strtotime($item->getCreatedAt()),
                 'first_name' => $item->getFirstname(),
                 'last_name' => $item->getLastname(),
+                'date_of_birth' => $item->getDob() ? strtotime($item->getDob()) : null,
                 'attributes' => $attributes,
                 'event_time' => strtotime($item->getUpdatedAt())
             ]

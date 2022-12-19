@@ -15,19 +15,15 @@ class Panelid implements \Magento\Framework\Option\ArrayInterface
 
     public function __construct(
         \Superb\Recommend\Helper\Api $helperApi,
-        \Superb\Recommend\Helper\Data $helper,
-	\Magento\Store\Model\StoreManagerInterface $storeManager
+        \Superb\Recommend\Helper\Data $helper
     ) {
         $this->helperApi = $helperApi;
         $this->helper = $helper;
-	$this->_storeManager = $storeManager;
     }
 
     protected function getPanels()
     {
-	$websiteId = (int)$this->_storeManager->getStore()->getWebsiteId();
-        $websiteCode = $this->_storeManager->getWebsite($websiteId)->getCode();
-        return $this->helperApi->getPanels($websiteCode);
+        return $this->helperApi->getPanels('base');
     }
 
     public function toOptionArray()

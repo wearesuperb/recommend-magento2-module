@@ -19,29 +19,14 @@ define(['ko','jquery','Magento_Customer/js/customer-data'], function(ko,$,custom
 
         if(panelType=='product'){
             var page_type = "Product";
-
-            if(config.recommend_skus) {
-                var panels = '{' +
-                    '"id": "'+ config.recommend_panel_id +'",' +
-                    '"filter": ['+
-                    '   {' +
-                    '       "type": "product",' +
-                    '       "code": "sku",' +
-                    '       "operator": "in",' +
-                    '       "value": ' + config.recommend_skus +
-                    '   }' +
-                    ']' +
-                    '        }';
-            } else {
-                var panels = '{' +
-                    '            "id": "'+ config.panel_id +'",' +
-                    '            "context": {' +
-                    '                "current": {' +
-                    '                    "sku": "'+ config.current_sku +'"' +
-                    '                }' +
-                    '            }' +
-                    '        }';
-            }
+            var panels = '{' +
+                '            "id": "'+ config.panel_id +'",' +
+                '            "context": {' +
+                '                "current": {' +
+                '                    "sku": "'+ config.current_sku +'"' +
+                '                }' +
+                '            }' +
+                '        }';
         }
 
         if(panelType == 'category'){
@@ -87,8 +72,8 @@ define(['ko','jquery','Magento_Customer/js/customer-data'], function(ko,$,custom
 
 	var resultProd = [];
 	var resultLength = 0;
-	var resultCountry = '';console.log(result);
-	if(result !== undefined){
+	var resultCountry = '';
+	if(result !== undefined && result.data !== undefined){
 	    resultProd = result.data.products;
 	    resultLength = result.data.products.length;
 	    resultCountry = result.data.request_country;

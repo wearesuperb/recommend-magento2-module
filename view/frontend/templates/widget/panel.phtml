@@ -1,12 +1,5 @@
 <?php
     $scope = 'recommend-panel-'.$block->getPanelId();
-    $recommendEnable = $block->getRecommendEnable();
-    $recommendRelatedProductSkus = $recommendEnable ? $block->getRelatedRecommendProductSkus() : '';
-    $recommendPanelId = "product-magento-recommend";
-
-    // ko
-    // If item.original_price > item.price then item have sale and need to show discount percent
-    //
 ?>
 
 <script type="text/x-magento-init">
@@ -28,9 +21,7 @@
                     "title": "<?= $block->getTitle() ?>",
                     "description": "<?= $block->getDescription() ?>",
                     "custom_text": "<?= $block->getCustomText() ?>",
-                    "skus": <?= json_encode($block->getSkusFromBasketPage()) ?>,
-                    "recommend_skus": <?= json_encode($recommendRelatedProductSkus) ?>,
-                    "recommend_panel_id": "<?= $recommendPanelId ?>"
+                    "skus": <?= json_encode($block->getSkusFromBasketPage()) ?>
                 }
             }
         }
@@ -38,9 +29,7 @@
 }
 </script>
 
-
 <div data-bind="scope: '<?= $scope ?>'" class="widget block block-static-block">
-<!-- ko if: items.length > 0-->
     <div class="content-heading">
         <h2 class="title" data-bind="text: title"></h2>
         <p class="info" data-bind="text: description"></p>
@@ -66,18 +55,9 @@
                                 <div class="price-box price-final_price" data-role="priceBox">
                                     <span class="price-container price-final_price tax weee">
                                         <span id="old-price-6-widget-product-grid" class="price-wrapper ">
-                                            <span data-bind="text:'<?= $block->getCurrencySymbol() ?>'+item.price.toFixed(2)" class="price"></span>
+                                            <span data-bind="text:item.price" class="price"></span>
                                         </span>
                                     </span>
-                                    <!-- ko if: item.original_price > item.price -->
-                                    <span class="old-price">
-                                        <span class="price-container price-final_price tax weee">
-                                            <span class="price-wrapper">
-                                                <span data-bind="text:'<?= $block->getCurrencySymbol() ?>'+item.original_price.toFixed(2)" class="price"></span>
-                                            </span>
-                                        </span>
-                                    </span>
-                                    <!-- /ko -->
                                 </div>
                             </div>
                         </div>
@@ -87,6 +67,4 @@
             </div>
         </div>
     </div>
-<!-- /ko -->
 </div>
-
