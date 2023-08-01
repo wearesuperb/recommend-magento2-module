@@ -476,6 +476,58 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         }
     }
 
+    public function compareCustomAttributes(string $storeCode, array $customAttributes)
+    {
+        foreach ($customAttributes as $customAttribute) {
+            $isSet = $this->checkCustomAttribute(
+                $storeCode,
+                $customAttribute['entity_type'],
+                $customAttribute['code']
+            );
+
+            if (is_array($isSet) && $isSet) {
+                continue;
+            }
+
+            $this->createCustomAttribute(
+                $storeCode,
+                $customAttribute['entity_type'],
+                $customAttribute['code'],
+                [
+                    'title' => $customAttribute['title'],
+                    'type' => $customAttribute['type'],
+                    'data_type' => 'direct'
+                ]
+            );
+        }
+    }
+
+    private function createCustomAttribute($storeId, $type, $code, $data)
+    {
+        $this->createRecommendAttribute($storeId, $type, $code, $data);
+    }
+
+    private function checkCustomAttribute($storeId, $attributeType, $attributeCode)
+    {
+        try {
+            $response = $this->_callApi(
+                $this->_getAttributesUrl($attributeType, $storeId, $attributeCode),
+                $storeId,
+                [],
+                'GET'
+            );
+
+            if (isset($response['success']) && $response['success'] == true) {
+                return $response['result'];
+            }
+            $this->backendSession->addError(__('API not connected. Check Account Id and API key.'));
+            return false;
+
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+        }
+    }
+    
     public function updateAccount($storeId = null)
     {
         try {
@@ -528,7 +580,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         }
         if($data !== null){
             $data_string = json_encode($data);
-            $this->_logger->critical($data_string);
+            //$this->_logger->critical($data_string);
             curl_setopt($_ch, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($_ch, CURLOPT_POSTFIELDS, $data_string);
             $headers[] = 'Content-Type: application/json';
@@ -538,6 +590,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         curl_setopt($_ch, CURLOPT_RETURNTRANSFER, 1);
         $responseBody = curl_exec($_ch);
         curl_close($_ch);
+        $this->_logger->critical($url);
         $this->_logger->critical($responseBody);
         $response = \json_decode($responseBody, true);
 
@@ -727,15 +780,18 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
         }
     }
 
-    public function syncOrders($data)
+    public function syncOrders($data,$website=null)
     {
         try {
+    	    if($website==null){
+    		$website=$this->getDefaultWebsite()->getCode();
+    	    }
             $chunkData = array_chunk($data, 100);
             $counter = 1;
             foreach($chunkData as $batchData) {
                 $response = $this->_callApi(
-                    $this->_getUploadOrdersUrl($this->getDefaultWebsite()->getCode()),
-                    $this->getDefaultWebsite()->getCode(),
+                    $this->_getUploadOrdersUrl($website),
+                    $website,
                     [
                         'data' => $batchData
                     ],
@@ -899,7 +955,7 @@ class Api extends \Magento\Framework\App\Helper\AbstractHelper
                     'variation_sku' => $item->getSku(),
                     'price' => $price,
                     'base_price' => $baseprice,
-                    'image' => $product->getData('small_image'),
+                    'image' => $product->getData('small_image')?$product->getData('small_image'):'',
                     'url' => $product->getProductUrl(),
                     'quantity' => (int) $qty
                 ];

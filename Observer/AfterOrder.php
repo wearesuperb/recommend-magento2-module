@@ -11,7 +11,7 @@ class AfterOrder implements ObserverInterface
      * @var \Superb\Recommend\Helper\Api
      */
     protected $_helperApi;
-
+    
     /**
      * AfterOrder constructor.
      * @param \Superb\Recommend\Helper\Api $api
@@ -83,7 +83,7 @@ class AfterOrder implements ObserverInterface
             ]
         ];
 
-        $this->_helperApi->syncOrders($data);
+        $this->_helperApi->syncOrders($data,$order->getStore()->getWebsite()->getCode());
 
     }
 }

@@ -162,7 +162,7 @@ class Sync extends Command
 
         $websites = $this->getWebsitesList();
 
-        foreach($websites as $_website){
+        /*foreach($websites as $_website){
             $stores = $this->storeWebsiteRelation->getStoreByWebsiteId($_website->getId());
             $productAttributes = $this->_helperApi->getAttributes($_website->getCode());
             //Categories array
@@ -175,51 +175,50 @@ class Sync extends Command
                 //Products array
                 $products[$_website->getCode()][$store->getCode()]=$this->getProductsByStore($store,$productAttributes);
             }
-        }
+        }*/
 
         $output->writeln('<info>Data synchronization start</info>');
 
 
-        $categoriesBatch = $categories;
+        //$categoriesBatch = $categories;
         $output->writeln('<info>Categories list generated</info>');
-        $productBatch = $this->generateProducts($products);
+        //$productBatch = $this->generateProducts($products);
         $output->writeln('<info>Products list generated</info>');
         $ordersBatch = $this->generateOrders();
         $output->writeln('<info>Orders list generated</info>');
-        $subscribers = $this->generateSubscribers();
+        //$subscribers = $this->generateSubscribers();
         $output->writeln('<info>Subscribers list generated</info>');
-        $customers = $this->generateCustomers();
-        $customersBatch = array_merge($subscribers['customer'],$customers);
+        //$customers = $this->generateCustomers();
+        //$customersBatch = array_merge($subscribers['customer'],$customers);
 
         foreach($websites as $_website){
             $output->writeln('<info>Start upload for store `'.$_website->getCode().'`</info>');
-            $uploadId = $this->_helperApi->initUpload($_website->getCode());
+            //$uploadId = $this->_helperApi->initUpload($_website->getCode());
             //$uploadId='123';
-            $output->writeln('Generated upload #'.$uploadId);
+        //    $output->writeln('Generated upload #'.$uploadId);
 
             if (isset($categoriesBatch[$_website->getCode()])) {
-                $this->_helperApi->syncCategories($categoriesBatch[$_website->getCode()],$_website->getCode(),$uploadId);
+//                $this->_helperApi->syncCategories($categoriesBatch[$_website->getCode()],$_website->getCode(),$uploadId);
             }
 
             if (isset($productBatch[$_website->getCode()])) {
                 if (isset($productBatch[$_website->getCode()]['products'])) {
-                    $this->_helperApi->syncProducts($productBatch[$_website->getCode()]['products'],$_website->getCode(),$uploadId);
+//                    $this->_helperApi->syncProducts($productBatch[$_website->getCode()]['products'],$_website->getCode(),$uploadId);
                 }
                 if (isset($productBatch[$_website->getCode()]['variants'])) {
-                    $this->_helperApi->syncVariants($productBatch[$_website->getCode()]['variants'],$_website->getCode(),$uploadId);
+//                    $this->_helperApi->syncVariants($productBatch[$_website->getCode()]['variants'],$_website->getCode(),$uploadId);
                 }
             }
 
-            $this->_helperApi->commitBatch($_website->getCode(),$uploadId);
+//            $this->_helperApi->commitBatch($_website->getCode(),$uploadId);
         }
-
+//var_dump($ordersBatch);die;
         $output->writeln('Start upload orders');
-        //$this->_helperApi->syncOrders($ordersBatch);
+        $this->_helperApi->syncOrders($ordersBatch,'us');
         $output->writeln('Start upload chennels');
         //$this->_helperApi->sendChennelData($subscribers['chennel']);
         $output->writeln('Start upload customers');
         //$this->_helperApi->sendCustomer($customersBatch);
-
 
     }
 
@@ -441,9 +440,9 @@ class Sync extends Command
     protected function generateOrders()
     {
         $now = new \DateTime();
-        $startDate = date("Y-m-d h:i:s",strtotime('2020-12-31')); // start date
-        $endDate = date("Y-m-d h:i:s", strtotime('2021-1-20')); // end date
-        $orders = $this->_orderCollection->create()->addAttributeToSelect('*')->addAttributeToFilter('created_at', array('from'=>$startDate, 'to'=>$endDate));
+        $startDate = date("Y-m-d h:i:s",strtotime('2023-1-11')); // start date
+        $endDate = date("Y-m-d h:i:s", strtotime('2023-2-14')); // end date
+        $orders = $this->_orderCollection->create()->addFieldToFilter('store_id', 3)->addAttributeToSelect('*')->addAttributeToFilter('created_at', array('from'=>$startDate, 'to'=>$endDate));
 
         $data = [];
 

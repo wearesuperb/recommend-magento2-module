@@ -113,8 +113,8 @@ class Update extends Command
         \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory       $subscriberCollection,
         \Magento\Customer\Model\CustomerFactory                                    $customerFactory,
         \Magento\Catalog\Model\ProductFactory                                      $productFactory,
-        \Superb\RecommendWidget\Helper\Api                                         $helperApi,
-        \Superb\RecommendWidget\Helper\Data                                        $helper,
+        \Superb\Recommend\Helper\Api                                         $helperApi,
+        \Superb\Recommend\Helper\Data                                        $helper,
         SerializerInterface                                                        $serializer,
         \Magento\Store\Api\StoreWebsiteRelationInterface                           $storeWebsiteRelation,
         State                                                                      $state,
@@ -213,9 +213,9 @@ class Update extends Command
 
         foreach ($websites as $_website) {
             //TODO: Edit if you need other stores
-            if ($_website->getCode() !== 'base') {
-                continue;
-            }
+            //if ($_website->getCode() !== 'base') {
+            //    continue;
+            //}
             $output->writeln('<info>Start upload for store `' . $_website->getCode() . '`</info>');
 
             if (isset($categoriesBatch[$_website->getCode()])) {

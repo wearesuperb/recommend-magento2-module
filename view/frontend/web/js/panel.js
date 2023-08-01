@@ -75,6 +75,10 @@ define(['ko','jquery','Magento_Customer/js/customer-data'], function(ko,$,custom
 	var resultCountry = '';
 	if(result !== undefined && result.data !== undefined){
 	    resultProd = result.data.products;
+        $.each( resultProd, function( i, item ) {
+            item.price = config.currency_symbol + '' + item.price;
+            item.original_price = config.currency_symbol + '' + item.original_price;
+        });
 	    resultLength = result.data.products.length;
 	    resultCountry = result.data.request_country;
 	}

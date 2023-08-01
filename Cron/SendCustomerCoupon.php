@@ -32,8 +32,8 @@ class SendCustomerCoupon
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\SalesRule\Api\CouponRepositoryInterface $couponRepository,
         \Magento\Framework\Math\Random $random,
-        \Superb\RecommendWidget\Helper\Api $apiHelper,
-        \Superb\RecommendWidget\Helper\Data $dataHelper,
+        \Superb\Recommend\Helper\Api $apiHelper,
+        \Superb\Recommend\Helper\Data $dataHelper,
         \Magento\SalesRule\Model\RuleFactory $ruleModel,
         \Magento\SalesRule\Api\RuleRepositoryInterface $ruleRepository,
         \Magento\Framework\Module\Manager $moduleManager

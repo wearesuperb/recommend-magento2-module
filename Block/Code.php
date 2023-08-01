@@ -119,6 +119,11 @@ class Code extends \Magento\Framework\View\Element\Template implements \Magento\
         return $this->helper->getCurrencyCode();
     }
 
+    public function getCurrencySymbol()
+    {
+        return $this->helper->getCurrencySymbol();
+    }
+
     public function getEnvironment()
     {
         return $this->storeManager->getStore()->getCode();

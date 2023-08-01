@@ -23,6 +23,19 @@ use Magento\Newsletter\Model\Subscriber;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    const IDS_IMAGES_RECOMMEND_PANELS = [];
+
+    const CUSTOM_PRODUCT_ATTRIBUTES = [];
+
+    const CUSTOM_CUSTOMER_ATTRIBUTES = [
+        [
+            'code' => 'coupon_code',
+            'title' => 'Coupon code',
+            'type' => 'string',
+            'entity_type' => 'contact'
+        ]
+    ];
+
     const XML_PATH_ENABLED                      = 'superbrecommend/general_settings/enabled';
     const XML_PATH_ACCOUNT_ID                   = 'superbrecommend/general_settings/account_id';
     const XML_PATH_DATA_CRON_ENABLED            = 'superbrecommend/data_cron/enabled';
@@ -64,6 +77,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->scopeConfig = $context->getScopeConfig();
         $this->categoryCollection = $categoryCollection;
         parent::__construct($context);
+    }
+
+    public function getIdsImagesRecommendPanels()
+    {
+        return self::IDS_IMAGES_RECOMMEND_PANELS;
+    }
+
+    public function getCustomProductAttributes()
+    {
+        return self::CUSTOM_PRODUCT_ATTRIBUTES;
+    }
+
+    public function getCustomCustomerAttributes()
+    {
+        return self::CUSTOM_CUSTOMER_ATTRIBUTES;
     }
 
     public function isEnabled($storeId = null)
@@ -129,6 +157,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCurrencyCode()
     {
         return $this->storeManager->getStore()->getCurrentCurrency()->getCode();
+    }
+
+    public function getCurrencySymbol()
+    {
+        return $this->storeManager->getStore()->getCurrentCurrency()->getCurrencySymbol();
     }
 
     public function getCurrentStore()

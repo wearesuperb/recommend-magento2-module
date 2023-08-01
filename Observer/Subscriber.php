@@ -81,9 +81,9 @@ class Subscriber implements ObserverInterface
                     'email' => $item->getSubscriberEmail()
                 ]
             ];
-            $this->_apiHelper->sendCustomer($customerData);
+            $this->_apiHelper->sendCustomer($customerData,$this->storeManager->getWebsite()->getCode());
         }
-        $this->_apiHelper->sendChennelData($channelData);
+        $this->_apiHelper->sendChennelData($channelData,$this->storeManager->getWebsite()->getCode());
         $this->recommendSession->create()->setAddSubscribe(
             [
                 'email_hash' => hash_hmac('sha256', $item->getSubscriberEmail(), $this->helper->getHashSecretKey($this->storeManager->getStore()->getId()))

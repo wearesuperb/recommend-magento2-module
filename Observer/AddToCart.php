@@ -88,12 +88,10 @@ class AddToCart implements ObserverInterface
 	if($this->checkoutSession->getQuote()->getLastAddedItem()){
 	    $quoteItem = $this->checkoutSession->getQuote()->getLastAddedItem()->getId();
 	}
-
         /** @var \Magento\Sales\Model\Order\Item $item */
         foreach ($items as $item) {
 
 if ($item->getParentItem()&&$item->getParentItem()->getProduct()->getId()==$sessionItem) {
-
 			$product['contents'][] = [
                     	    'id' => $item->getParentItem()->getProduct()->getData('sku'),
                     	    'name' => $item->getName(),
@@ -102,8 +100,7 @@ if ($item->getParentItem()&&$item->getParentItem()->getProduct()->getId()==$sess
                 	];
 
 }
-	    if($item->getProduct()->getId()==$sessionItem){
-
+	    if($item->getProduct()->getId()){
         	if ($item->getProduct()->getTypeId() == $typeConfi) {
             	    continue;
         	}
