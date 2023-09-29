@@ -35,6 +35,8 @@ class Update extends Command
     const WEBSITE = 'website';
     const XML_PATH_TRACKING_PRODUCT_ATTRIBUTES = 'superbrecommend/general_settings/product_attributes';
 
+    protected $categoryIds = [];
+
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
@@ -113,8 +115,8 @@ class Update extends Command
         \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory       $subscriberCollection,
         \Magento\Customer\Model\CustomerFactory                                    $customerFactory,
         \Magento\Catalog\Model\ProductFactory                                      $productFactory,
-        \Superb\Recommend\Helper\Api                                         $helperApi,
-        \Superb\Recommend\Helper\Data                                        $helper,
+        \Superb\RecommendWidget\Helper\Api                                         $helperApi,
+        \Superb\RecommendWidget\Helper\Data                                        $helper,
         SerializerInterface                                                        $serializer,
         \Magento\Store\Api\StoreWebsiteRelationInterface                           $storeWebsiteRelation,
         State                                                                      $state,
@@ -213,9 +215,9 @@ class Update extends Command
 
         foreach ($websites as $_website) {
             //TODO: Edit if you need other stores
-            //if ($_website->getCode() !== 'base') {
-            //    continue;
-            //}
+            if ($_website->getCode() !== 'base') {
+                continue;
+            }
             $output->writeln('<info>Start upload for store `' . $_website->getCode() . '`</info>');
 
             if (isset($categoriesBatch[$_website->getCode()])) {
@@ -233,13 +235,25 @@ class Update extends Command
         }
     }
 
+    protected function checkCategory($category)
+    {
+        $cat = $category->getParentCategory();
+        if($cat!==null&&$cat->getPath()!='1/2'&&$cat->getIsAnchor()=='1'&&$cat->getIsActive()=='1'){
+            $this->categoryIds[] = $cat->getId();
+            $this->checkCategory($cat);
+        }
+    }
+
     protected function getProductsByStore($store, $productAttributes)
     {
         $productsCollection = $this->getProducts($store->getId());
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $stockItem = $objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
+        $priceCurrencyObject = $objectManager->get('Magento\Framework\Pricing\PriceCurrencyInterface');
 
         $data = [];
+        $currencies = $this->_helper->getCurrenciesByStoreStore($store);
+
         foreach ($productsCollection as $_product) {
             if ($_product->getVisibility() != '1') {
                 $productStock = $stockItem->getStockItem($_product->getEntityId());
@@ -273,49 +287,73 @@ class Update extends Command
                     }
                 }
 
-                $original_price = [];
-                $price = [];
-
-                $original_price[] = [
+                $original_price = [
                     'code' => 'default',
-                    'prices' => [0 => [
-                        'currency' => $store->getCurrentCurrency()->getCode(),
-                        'value' => (float)$_product->getPrice()
-                    ]]
+                    'prices' => []
                 ];
 
-
-                $price[] = [
+                $price = [
                     'code' => 'default',
-                    'prices' => [0 => [
-                        'currency' => $store->getCurrentCurrency()->getCode(),
-                        'value' => (float)$_product->getFinalPrice()
-                    ]]
+                    'prices' => []
                 ];
-                if ($_product->getTypeId() == 'configurable') {
-                    $original_price[0] = [
-                        'code' => 'default',
-                        'prices' => [0 => [
-                            'currency' => $store->getCurrentCurrency()->getCode(),
-                            'value' => (float)$_product->getPriceInfo()->getPrice('regular_price')->getMinRegularAmount()->getValue()
-                        ]]
+
+                foreach ($currencies as $code => $currency) {
+                    if ($_product->getTypeId() == 'configurable') {
+                        $original_price['prices'][] = [
+                            'currency' => $code,
+                            'value' => (float) number_format(
+                                $priceCurrencyObject->convert(
+                                    $_product->getPriceInfo()->getPrice('regular_price')->getMinRegularAmount()->getValue(),
+                                    $store,
+                                    $currency),
+                                2)
+                        ];
+                    } else {
+                        $original_price['prices'][] = [
+                            'currency' => $code,
+                            'value' => (float) number_format($priceCurrencyObject->convert(
+                                    $_product->getPrice(),
+                                    $store,
+                                    $currency),
+                                2
+                            )
+                        ];
+                    }
+
+                    $price['prices'][] = [
+                        'currency' => $code,
+                        'value' => (float) number_format($priceCurrencyObject->convert(
+                                $_product->getFinalPrice(),
+                                $store,
+                                $currency),
+                            2
+                        )
                     ];
                 }
+
                 $parents = $this->_catalogProductTypeConfigurable->getParentIdsByChild($_product->getId());
+
+                $categories = $_product->getCategoryCollection();
+                $this->categoryIds = [];
+                foreach($categories as $category){
+                    $this->categoryIds[] = $category->getId();
+                    $this->checkCategory($category);
+                }
+                $this->categoryIds = array_values(array_unique($this->categoryIds));
 
                 $array = [
                     'id' => $_product->getId(),
                     'status' => $this->isItEnabled($_product, $productStock),
                     'sku' => $_product->getSku(),
                     'name' => $_product->getName() ?? '',
-                    'lists' => $_product->getCategoryIds(),
+                    'lists' => $this->categoryIds,
                     'url' => $_product->getProductUrl(),
                     'image' => $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $_product->getImage(),
                     'description' => $_product->getShortDescription() ? $_product->getShortDescription() : '',
-                    'stock_quantity' => $productStock->getQty(),
+                    'stock_quantity' => $productStock->getQty() ?? 0,
                     'attributes' => $attributes,
-                    'price' => $price,
-                    'original_price' => $original_price
+                    'price' => [$price],
+                    'original_price' => [$original_price]
                 ];
 
                 //if (isset($parents[0])) {
